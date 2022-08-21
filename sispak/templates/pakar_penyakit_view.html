@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="tambah_data">
+        {% if edit == "True" %}
+            <h3>Edit Data Penyakit</h3>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.submit(class="btn btn-base") }}
+                <table class="table-register">
+                    <tr>
+                        <td>{{ form.kode.label }}</td>
+                        <td>
+                            {{ form.kode(size=32, readonly=True, value=penyakit.kode) }}
+                            {% for error in form.kode.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.penyakit.label }}</td>
+                        <td>
+                            {{ form.penyakit(value=penyakit.penyakit) }}
+                            {% for error in form.penyakit.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.gejala.label }}</td>
+                        <td>
+                            {{ form.gejala(class="no_list") }}
+                            {% for error in form.gejala.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.deskripsi.label }}</td>
+                        <td>
+                            {{ form.deskripsi() }}
+                            {% for error in form.deskripsi.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.penanganan.label }}</td>
+                        <td>
+                            {{ form.penanganan() }}
+                            {% for error in form.penanganan.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        {% else %}
+            <h3>Data Penyakit</h3>
+            <a href="{{ url_for('pakar_penyakit_view', id_penyakit = penyakit.id, editable=True) }}" class="btn btn-base">Edit</a>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <table class="table-register">
+                    <tr>
+                        <td>{{ form.kode.label }}</td>
+                        <td>
+                            {{ form.kode(size=32, readonly=True, value=penyakit.kode) }}
+                            {% for error in form.kode.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.penyakit.label }}</td>
+                        <td>
+                            {{ form.penyakit(readonly=True, value=penyakit.penyakit) }}
+                            {% for error in form.penyakit.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.gejala.label }}</td>
+                        <td>
+                            <ul class="no_list" id="gejala">
+                                {% for data in form.gejala.choices %}
+
+                                <li>
+                                    {% if data[0] in form.gejala.data %}
+                                        <input disabled checked id="gejala-{{ data[0] }}" name="gejala" type="checkbox" value="{{ data[0] }}"> 
+                                    {% else %}
+                                        <input disabled id="gejala-{{ data[0] }}" name="gejala" type="checkbox" value="{{ data[0] }}"> 
+                                    {% endif %}
+                                    <label for="gejala-0">{{ data[1] }}</label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% for error in form.gejala.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.deskripsi.label }}</td>
+                        <td>
+                            {{ form.deskripsi(readonly=True,value=penyakit.deskripsi) }}
+                            {% for error in form.deskripsi.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.penanganan.label }}</td>
+                        <td>
+                            {{ form.penanganan(readonly=True) }}
+                            {% for error in form.penanganan.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        {% endif %}
+    </div>
+    <div class="isi_data">
+        
+    </div>
+{% endblock %}

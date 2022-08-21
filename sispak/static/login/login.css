@@ -1,0 +1,110 @@
+body {
+    background: rgb(132, 148, 161);
+    font-family: 'Open Sans', sans-serif;
+  }
+  .login {
+    margin: 16px auto;
+    font-size: 16px;
+    height: 100vh;
+  }
+  /* Reset top and bottom margins from certain elements */
+  .login-header,
+  .login p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .login-header {
+    background: #28d;
+    padding: 20px;
+    font-size: 1.4em;
+    font-weight: normal;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .login-container {
+    background: #ebebeb;
+    padding: 12px;
+  }
+  /* Every row inside .login-container is defined with p tags */
+  .login p {
+    padding: 12px;
+  }
+  .login input {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    border-width: 1px;
+    border-style: solid;
+    padding: 16px;
+    outline: 0;
+    font-family: inherit;
+    font-size: 0.95em;
+  }
+  .login input[type="text"],
+  .login input[type="password"] {
+    background: #fff;
+    border-color: #bbb;
+    color: #555;
+  }
+  /* Text fields' focus effect */
+  .login input[type="email"]:focus,
+  .login input[type="password"]:focus {
+    border-color: #888;
+  }
+  .login input[type="submit"] {
+    background: #28d;
+    border-color: transparent;
+    color: #fff;
+    cursor: pointer;
+  }
+  .login input[type="submit"]:hover {
+    background: #17c;
+  }
+  /* Buttons' focus effect */
+  .login input[type="submit"]:focus {
+    border-color: #05a;
+  }
+/* For mobile phones: */
+[class*="col-"] {
+    width: 100%;
+}
+  
+@media only screen and (min-width: 280px) {
+    /* For tablets: */
+    .col-s-1 {width: 0.33%;}
+    .col-s-2 {width: 6.66%;}
+    .col-s-3 {width: 15%;}
+    .col-s-4 {width: 23.33%;}
+    .col-s-5 {width: 41.66%;}
+    .col-s-6 {width: 40%;}
+    .col-s-7 {width: 48.33%;}
+    .col-s-8 {width: 56.66%;}
+    .col-s-9 {width: 65%;}
+    .col-s-10 {width: 73.33%;}
+    .col-s-11 {width: 81.66%;}
+    .col-s-12 {width: 90%;}
+    .col-s-custom-0 {width:100%;}
+}
+@media only screen and (min-width: 480px) {
+    .col-s-custom-0 {width:70%;}
+}
+@media only screen and (min-width: 680px) {
+    .col-s-custom-0 {width:50%;}
+}
+@media only screen and (min-width: 1000px) {
+    /* For desktop: */
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+    .col-custom-0 {width:30%;}
+}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="tambah_data">
+        {% if edit == True %}
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <h3>User Detail </h3>
+                {{ form.submit(label="Simpan", class="btn btn-base") }}
+                <a href="{{ url_for('my_profil') }}" class="btn btn-red" style="padding: 4px;">Batal</a>
+                <table class="table-register">
+                    <tr>
+                        <td>{{ form.username.label }}</td>
+                        <td>
+                            {{ form.username(size=32, value=user.username) }}
+                            {% for error in form.username.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label }}</td>
+                        <td>
+                            {{ form.password(size=32) }}
+                            {% for error in form.password.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password2.label }}</td>
+                        <td>
+                            {{ form.password2(size=32) }}
+                            {% for error in form.password2.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        {% else %}
+            <h3>User Detail </h3>
+            <a href="{{ url_for('edit_my_profil') }}" class="btn btn-base">Edit</a>
+            <table class="table-register">
+                <tr>
+                    <td>Username</td>
+                    <td>
+                        <input type="text" value="{{ user.username }}" readonly=readonly/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipe Pengguna</td>
+                    <td>
+                        <input type="text" value="{{ user.type }}" readonly=readonly/>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+    <div class="isi_data">
+    </div>
+{% endblock %}

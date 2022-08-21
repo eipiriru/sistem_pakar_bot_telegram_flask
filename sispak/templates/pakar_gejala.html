@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+<div class="tambah_data">
+    <h3>Tambah Data Gejala</h3>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <table class="table-register">
+            <tr>
+                <td>{{ form.kode.label }}</td>
+                <td>
+                    {{ form.kode(size=32, readonly=True, value=kode) }}
+                    {% for error in form.kode.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.gejala.label }}</td>
+                <td>
+                    {{ form.gejala() }}
+                    {% for error in form.gejala.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.deskripsi.label }}</td>
+                <td>
+                    {{ form.deskripsi() }}
+                    {% for error in form.deskripsi.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">{{ form.submit(class="btn btn-base") }}</td>
+            </tr>
+        </table>
+    </form>
+</div>
+    <div class="isi_data">
+        <h3>Data Gejala</h3>
+        <table class="table table-base">
+            <thead>
+                <tr>
+                    <th>Kode Gejala</th>
+                    <th>Nama Gejala</th>
+                    <th>Deskripsi Gejala</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in gejala %}
+                    <tr>
+                        <td>{{ data.kode }}</td>
+                        <td>{{ data.gejala }}</td>
+                        <td><textarea class="in" readonly="readonly">{{ data.deskripsi }}</textarea></td>
+                        <td>
+                            <a href="{{ url_for('pakar_gejala_view', id_gejala = data.id, editable=False) }}" class="btn btn-small btn-base">View</a>
+                            <a href="{{ url_for('pakar_gejala_delete', id_gejala = data.id) }}" class="btn btn-small btn-red">Hapus</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

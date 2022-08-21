@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block content0 %}
+    <style type="text/css">
+        #qtc-results {
+          display: none;
+        }
+        #pertanyaan_disini {
+          display: none;
+        }
+        #wait_message {
+            color: red;
+            display: none;
+        }
+    </style>
+    <div class="card">
+        <div class="card-header">
+            <h3>Diagnosa</h3>
+        </div>
+        <div class="card-body">
+            <input type="submit" id="start" name="next" value="MULAI DIAGNOSA" onclick="start();">
+
+            <br>
+            <div id="pertanyaan_disini">
+                <h2>MEMULAI DIAGNOSA</h2>
+                <span id="num-rows">Harap Tunggu sedang memuat . . . </span>
+            </div>
+            <div id="qtc-results">
+                <span id="wait_message">Memuat . . . </span>
+                <input type="text" id="penyakit_yes" hidden/>
+                <input type="text" id="penyakit_no" hidden />
+                <input type="text" id="gejala_yes" hidden />
+                <input type="text" id="gejala_no" hidden />
+                <input type="submit" id="button_tanggapan_ya" name="yes" value="YA" onclick="ya();">
+                <input type="submit" id="button_tanggapan_no" name="no" value="TIDAK" onclick="no();">
+            </div>
+
+            
+        </div>
+    </div>
+    <script type="text/javascript">
+        function start() {
+            var numRows = document.getElementById("num-rows");
+            var start = document.getElementById("start");
+            var penyakit_yes = document.getElementById("penyakit_yes");
+            var penyakit_no = document.getElementById("penyakit_no");
+            var gejala_yes = document.getElementById("gejala_yes");
+            var gejala_no = document.getElementById("gejala_no");
+            var resultsContainer = document.getElementById("qtc-results");
+            var pertanyaan_disini = document.getElementById("pertanyaan_disini");
+            var button_tanggapan_ya = document.getElementById("button_tanggapan_ya");
+            var button_tanggapan_no = document.getElementById("button_tanggapan_no");
+            $.ajax({
+              type: "POST",
+              url: "/start_diagnosa",
+              contentType: "application/json",
+              dataType: 'json',
+              success: function(result) {
+                console.log("Result:");
+                console.log(result);
+                resultsContainer.style.display = "block";
+                numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>"; 
+                penyakit_yes.value = result['penyakit_yes'];
+                penyakit_no.value = result['penyakit_no'];
+                gejala_yes.value = result['gejala_yes'];
+                gejala_no.value = result['gejala_no'];
+                button_tanggapan_ya.style.display='';
+                button_tanggapan_no.style.display='';
+              } 
+            });
+            start.style.display='none';
+            pertanyaan_disini.style.display = "block";
+            numRows.innerHTML = "<p>Harap Tunggu sedang memuat . . .</p>"; 
+        }
+
+        function ya(){
+            var numRows = document.getElementById("num-rows");
+            var penyakit_yes = document.getElementById("penyakit_yes");
+            var penyakit_no = document.getElementById("penyakit_no");
+            var gejala_yes = document.getElementById("gejala_yes");
+            var gejala_no = document.getElementById("gejala_no");
+            var button_tanggapan_ya = document.getElementById("button_tanggapan_ya");
+            var button_tanggapan_no = document.getElementById("button_tanggapan_no");
+            var start = document.getElementById("start");
+            var wait_message = document.getElementById("wait_message");
+            var server_data = {
+                "penyakit": penyakit_yes.value.split(','),
+                "gejala":gejala_yes.value.split(','),
+            };
+            $.ajax({
+                type: "POST",
+                url: "/process_ya",
+                data: JSON.stringify(server_data),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(result) {
+                    console.log("Result:");
+                    console.log(result);
+                    wait_message.style.display='none';
+                    penyakit_yes.value = result['penyakit_yes'];
+                    penyakit_no.value = result['penyakit_no'];
+                    gejala_yes.value = result['gejala_yes'];
+                    gejala_no.value = result['gejala_no'];
+                    if (result['message'] == 'belum'){
+                        numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>";
+                    }
+                    else{
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>Berdsarkan Tanggapan anda, <br/>Sistem Pakar memperoleh kesimpulan yang<br/> berdasarkan kepada basis pengetahuan yang ada pada database <br/> Anda mengalami penyakit <b>" + result['pertanyaan'] + "</b></p>"; 
+                    }
+                } 
+            });
+            wait_message.style.display='block';
+        }
+
+        function no(){
+            var numRows = document.getElementById("num-rows");
+            var penyakit_yes = document.getElementById("penyakit_yes");
+            var penyakit_no = document.getElementById("penyakit_no");
+            var gejala_yes = document.getElementById("gejala_yes");
+            var gejala_no = document.getElementById("gejala_no");
+            var button_tanggapan_ya = document.getElementById("button_tanggapan_ya");
+            var button_tanggapan_no = document.getElementById("button_tanggapan_no");
+            var start = document.getElementById("start");
+            var wait_message = document.getElementById("wait_message");
+            var server_data = {
+                "penyakit": penyakit_no.value.split(','),
+                "gejala":gejala_no.value.split(','),
+            };
+            $.ajax({
+                type: "POST",
+                url: "/process_ya",
+                data: JSON.stringify(server_data),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(result) {
+                    console.log("Result:");
+                    console.log(result);
+                    wait_message.style.display='none';
+                    penyakit_yes.value = result['penyakit_yes'];
+                    penyakit_no.value = result['penyakit_no'];
+                    gejala_yes.value = result['gejala_yes'];
+                    gejala_no.value = result['gejala_no'];
+                    if (result['message'] == 'belum'){
+                        numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>";
+                    }
+                    else{
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>Berdsarkan Tanggapan anda, <br/>Sistem Pakar memperoleh kesimpulan yang<br/> berdasarkan kepada basis pengetahuan yang ada pada database <br/> Anda mengalami penyakit <b>" + result['pertanyaan'] + "</b></p>"; 
+                    }
+                } 
+            });
+            wait_message.style.display='block';
+        }
+
+        function calculateQTc() {
+            var penyakit_yes = document.getElementById("penyakit_yes").value;
+            var gejala_yes = document.getElementById("gejala_yes").value;
+            var server_data = {
+                "penyakit_yes": penyakit_yes,
+                "gejala_yes":gejala_yes,
+            };
+            $.ajax({
+              type: "POST",
+              url: "/process_qtc",
+              data: JSON.stringify(server_data),
+              contentType: "application/json",
+              dataType: 'json',
+              success: function(result) {
+                console.log("Result:");
+                console.log(result);
+                
+              } 
+            });
+
+            var resultsContainer = document.getElementById("qtc-results");
+            resultsContainer.style.display = "block";
+        }
+    </script>
+{% endblock %}

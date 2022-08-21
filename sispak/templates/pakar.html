@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="tambah_data">
+        <h3>Tabel Keputusan</h3>
+        <table class="table-register">
+            <tr>
+                <td rowspan="2">GEJALA</td>
+                <td colspan="{{ jml_penyakit }}" style="text-align: center;">Penyakit</td>
+            </tr>
+            <tr>
+                {% for penyakit in penyakit %}
+                    <td>{{ penyakit.kode }} - {{ penyakit.penyakit }}</td>
+                {% endfor %}
+            </tr>
+            {% for gejala in gejala %}
+                <tr>
+                    <td>{{ gejala.kode }} - {{ gejala.gejala }}</td>
+                    {% for penyakit in penyakit %}
+                        {% if gejala in penyakit.gejala %}
+                            <td><input type="checkbox" disabled checked/></td>
+                        {% else %}
+                            <td><input type="checkbox" disabled/></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="isi_data" >
+        <div class="tree">
+            <ul>
+                <li>
+                    <a href="#">{{ root.pertanyaan }}</a>
+                    <ul>
+                        <li>
+                            <a href="#">2</a>
+                            <ul>
+                                <li>
+                                    <a href="#">2.1</a>
+                                </li>
+                                <li>
+                                    <a href="#">2.2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">3</a>
+                            <ul>
+                                <ul>
+                                    <li>
+                                        <a href="#">3.1</a>
+                                        <ul>
+                                            <li>
+                                                <a href="#">3.1.1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">3.1.2</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">3.2</a>
+                                    </li>
+                                </ul>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

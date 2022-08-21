@@ -1,0 +1,54 @@
+from faulthandler import disable
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, TextAreaField, SelectMultipleField, widgets
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from sispak.models import User, Gejala
+from flask_login import current_user
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Login')
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    user_type = RadioField('Tipe Pengguna', choices=(['admin','Administrator'],['pakar','Pakar']), validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Create User')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different username.')
+
+class ProfilForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password')
+    password2 = PasswordField('Repeat Password', validators=[EqualTo('password')])
+    submit = SubmitField('Create User')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None and username.data != current_user.username:
+            raise ValidationError('Please use a different username.')
+
+class FormGejala(FlaskForm):
+    kode = StringField('Kode Gejala', validators=[DataRequired()])
+    gejala = StringField('Nama Gejala', validators=[DataRequired()])
+    deskripsi = TextAreaField('Deskripsi')
+    submit = SubmitField('Simpan')
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class FormPenyakit(FlaskForm):
+    kode = StringField('Kode Penyakit', validators=[DataRequired()])
+    penyakit = StringField('Nama Penyakit', validators=[DataRequired()])
+    deskripsi = TextAreaField('Deskripsi', validators=[DataRequired()])
+    penanganan = TextAreaField('Penanganan', validators=[DataRequired()])
+    submit = SubmitField('Simpan')
+    gejala = MultiCheckboxField('Gejala',coerce=int, )
+    
