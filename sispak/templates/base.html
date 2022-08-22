@@ -25,7 +25,9 @@
                 </div>
                 <div class="menu">
                     <div class="">
-                        <a href="{{ url_for('index') }}" class="btn menuitem">DASHBOARD</a>
+                        {% if current_user.type in ['admin','pakar'] %}
+                            <a href="{{ url_for('index') }}" class="btn menuitem">DASHBOARD</a>
+                        {% endif %}
                         {% if current_user.type == 'pakar' %}
                             <a href="{{ url_for('pakar_gejala') }}" class="btn menuitem">DATA GEJALA</a>
                             <a href="{{ url_for('pakar_penyakit') }}" class="btn menuitem">DATA PENYAKIT</a>
@@ -34,8 +36,10 @@
                         {% if current_user.type == 'admin' %}
                             <a href="{{ url_for('register') }}" class="btn menuitem">DATA PENGGUNA</a>
                         {% endif %}
-                        <a href="{{ url_for('my_profil') }}" class="btn btn-green menuitem">PROFIL</a>
-                        <a href="{{ url_for('logout') }}" class="btn btn-red menuitem">LOGOUT</a>
+                        {% if current_user.type in ['admin','pakar'] %}
+                            <a href="{{ url_for('my_profil') }}" class="btn btn-green menuitem">PROFIL</a>
+                            <a href="{{ url_for('logout') }}" class="btn btn-red menuitem">LOGOUT</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="isi">

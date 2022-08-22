@@ -1,74 +1,126 @@
 {% extends "base.html" %}
 
 {% block content0 %}
-    <div class="tambah_data">
-        <h3>Tambah Data Administrator / Pakar</h3>
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <table class="table-register">
-                <tr>
-                    <td>{{ form.username.label }}</td>
-                    <td>
-                        {{ form.username(size=32) }}
-                        {% for error in form.username.errors %}
-                            <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ form.user_type.label }}</td>
-                    <td>
-                        {{ form.user_type(class="no_list") }}
-                        {% for error in form.user_type.errors %}
-                            <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ form.password.label }}</td>
-                    <td>
-                        {{ form.password(size=32) }}
-                        {% for error in form.password.errors %}
-                            <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ form.password2.label }}</td>
-                    <td>
-                        {{ form.password2(size=32) }}
-                        {% for error in form.password2.errors %}
-                            <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">{{ form.submit(class="btn btn-base") }}</td>
-                </tr>
-            </table>
-        </form>
-    </div>
-    <div class="isi_data">
-        <h3>Data Administrator / Pakar</h3>
-        <table class="table table-base">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Tipe User</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in data_pengguna %}
+    {% if pjg > 0 %}
+        <div class="tambah_data">
+            <h3>Tambah Data Administrator / Pakar</h3>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <table class="table-register">
                     <tr>
-                        <td>{{ data.username }}</td>
-                        <td>{{ data.type }}</td>
+                        <td>{{ form.username.label }}</td>
                         <td>
-                            <a href="{{ url_for('delete_user', id_user = data.id) }}" class="btn btn-small btn-red">Hapus</a>
+                            {{ form.username(size=32) }}
+                            {% for error in form.username.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
                         </td>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                    <tr>
+                        <td>{{ form.user_type.label }}</td>
+                        <td>
+                            {{ form.user_type(class="no_list") }}
+                            {% for error in form.user_type.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label }}</td>
+                        <td>
+                            {{ form.password(size=32) }}
+                            {% for error in form.password.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password2.label }}</td>
+                        <td>
+                            {{ form.password2(size=32) }}
+                            {% for error in form.password2.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">{{ form.submit(class="btn btn-base") }}</td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="isi_data">
+            <h3>Data Administrator / Pakar</h3>
+            <table class="table table-base">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Tipe User</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in data_pengguna %}
+                        <tr>
+                            <td>{{ data.username }}</td>
+                            <td>{{ data.type }}</td>
+                            <td>
+                                {% if data != current_user %}
+                                    <a href="{{ url_for('delete_user', id_user = data.id) }}" class="btn btn-small btn-red">Hapus</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="tambah_data">
+            <h3>Inisiasi</h3>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <table class="table-register">
+                    <tr>
+                        <td>{{ form.username.label }}</td>
+                        <td>
+                            {{ form.username(size=32) }}
+                            {% for error in form.username.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.user_type.label }}</td>
+                        <td>
+                            {{ form.user_type(class="no_list") }}
+                            {% for error in form.user_type.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password.label }}</td>
+                        <td>
+                            {{ form.password(size=32) }}
+                            {% for error in form.password.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password2.label }}</td>
+                        <td>
+                            {{ form.password2(size=32) }}
+                            {% for error in form.password2.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">{{ form.submit(class="btn btn-base") }}</td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}

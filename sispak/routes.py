@@ -10,6 +10,24 @@ from sispak.models import User, Gejala, Penyakit, relasi_tabel
 def page_not_found(e):
     return render_template('404.html'), 404
 
+@app.route('/initial/', methods=['GET', 'POST'])
+def initial():
+    data_user = User.query.all()
+    if len(data_user) > 0:
+        return render_template('404.html'), 404
+
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, type=form.user_type.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Akun %s berhasil dibuat!' % (form.username.data))
+        return redirect(url_for('login'))
+    
+    data_user = User.query.all()
+    return render_template('register.html', title='INISIASI', form=form, data_pengguna=data_user, pjg=len(data_user))
+
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -30,7 +48,8 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
 
-    return render_template('login.html', title='Log in', form=form)
+    data_user = User.query.all()
+    return render_template('login.html', title='Log in', form=form, pjg=len(data_user))
 
 @app.route('/logout/')
 @login_required
@@ -127,7 +146,7 @@ def register():
         return redirect(url_for('register'))
     
     data_user = User.query.all()
-    return render_template('register.html', title='Tambah Data Administrator / Pakar', form=form, data_pengguna=data_user)
+    return render_template('register.html', title='Tambah Data Administrator / Pakar', form=form, data_pengguna=data_user, pjg=len(data_user))
 
 @app.route('/admin/user/delete?<id_user>/', methods=['GET', 'POST'])
 @login_required
@@ -138,6 +157,10 @@ def delete_user(id_user):
 
     search_user = User.query.filter(User.id == id_user)
     user = search_user.first()
+    if user == current_user:
+        flash('Tidak bisa menghapus Akun (%s) anda sendiri!' % (user.username))
+        return redirect(url_for('register'))    
+
     flash('Akun %s telah dihapus!' % (user.username))
     search_user.delete()
     db.session.commit()

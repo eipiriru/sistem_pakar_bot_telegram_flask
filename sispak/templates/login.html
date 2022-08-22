@@ -37,6 +37,12 @@
             {% endwith %}
             {{ form.submit() }}
           </p>
+          <br/>
+          {% if pjg == 0 %}
+            <div style="text-align: center;">
+              <a href="{{ url_for('initial') }}">INITIAL</a>
+            </div>
+          {% endif %}
         </form>
       </div>
       <!-- <h1>Sign In Custom</h1>
