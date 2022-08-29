@@ -5,7 +5,7 @@
         {% if edit == True %}
             <form action="" method="post" novalidate>
                 {{ form.hidden_tag() }}
-                <h3>User Detail </h3>
+                <h3>User Detail </h3><br/>
                 {{ form.submit(label="Simpan", class="btn btn-base") }}
                 <a href="{{ url_for('my_profil') }}" class="btn btn-red" style="padding: 4px;">Batal</a>
                 <table class="table-register">
@@ -39,7 +39,7 @@
                 </table>
             </form>
         {% else %}
-            <h3>User Detail </h3>
+            <h3>User Detail </h3><br/>
             <a href="{{ url_for('edit_my_profil') }}" class="btn btn-base">Edit</a>
             <table class="table-register">
                 <tr>

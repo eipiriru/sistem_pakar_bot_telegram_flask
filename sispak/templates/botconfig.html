@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="tambah_data">
+        {% if edit == True %}
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <h3>User Detail </h3><br/>
+                {{ form.submit(label="Simpan", class="btn btn-base") }}
+                <a href="{{ url_for('admin_botconfig') }}" class="btn btn-red" style="padding: 4px;">Batal</a>
+                <table class="table-register">
+                    <tr>
+                        <td width="25%">{{ form.token.label }}</td>
+                        <td>
+                            {{ form.token(value=botconfig.token) }}
+                            {% for error in form.token.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.url.label }}<br/><i>Example : https://subdomain.herokuapp.com/</i></td>
+                        <td>
+                            {{ form.url(value=botconfig.url) }}
+                            {% for error in form.url.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        {% else %}
+            <h3>Bot Config </h3><br/>
+            <a href="{{ url_for('admin_botconfig_edit') }}" class="btn btn-base">Edit</a>
+            <table class="table-register">
+                <tr>
+                    <td width="25%">Token</td>
+                    <td>
+                        <input type="text" value="{{ botconfig.token }}" readonly=readonly/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>URL<br/><i>Example : https://subdomain.herokuapp.com/</i></td>
+                    <td>
+                        <input type="text" value="{{ botconfig.url }}" readonly=readonly/>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+    <div class="isi_data">
+    </div>
+{% endblock %}

@@ -1,10 +1,10 @@
 from flask import render_template, flash, redirect, url_for, session, request, jsonify
 from sispak import app, db
-from sispak.forms import LoginForm, RegistrationForm, ProfilForm, FormGejala, FormPenyakit
+from sispak.forms import LoginForm, RegistrationForm, ProfilForm, FormGejala, FormPenyakit, FormBotConfig
 from wtforms import Label
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from sispak.models import User, Gejala, Penyakit, relasi_tabel
+from sispak.models import User, Gejala, Penyakit, relasi_tabel, BotConfig
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -166,73 +166,62 @@ def delete_user(id_user):
     db.session.commit()
     return redirect(url_for('register'))
 
+@app.route('/admin/botconfig/', methods=['GET', 'POST'])
+@login_required
+def admin_botconfig():
+    if current_user.type != 'admin':
+        flash('User tidak memiliki hak akses')
+        return redirect(url_for('index'))
+
+    botconfig = BotConfig.query.limit(1).all()
+    if len(botconfig) > 0:
+        botconfig = BotConfig.query.filter_by().first()
+    return render_template('botconfig.html', title='Admin - Bot Config', edit=False, botconfig = botconfig)
+
+@app.route('/admin/botconfig/edit/', methods=['GET', 'POST'])
+@login_required
+def admin_botconfig_edit():
+    if current_user.type != 'admin':
+        flash('User tidak memiliki hak akses')
+        return redirect(url_for('index'))
+
+    botconfig = BotConfig.query.limit(1).all()
+    form = FormBotConfig()
+    if form.validate_on_submit():
+        if len(botconfig) > 0:
+            botconfig = BotConfig.query.filter_by().first()
+            if form.token.data:
+                botconfig.token = form.token.data
+            if form.url.data:
+                botconfig.url = form.url.data
+        else:
+            bot = BotConfig(token=form.token.data, url=form.url.data)
+            db.session.add(bot)
+        db.session.commit()
+        flash('Bot Config diupdate!')
+        return redirect(url_for('admin_botconfig'))
+
+    if len(botconfig) > 0:
+        botconfig = BotConfig.query.filter_by().first()
+    return render_template('botconfig.html', title='Admin - Bot Config', edit=True, botconfig = botconfig, form=form)
+
 # PAKAR
-
-class Node():
-    def __init__(self, key):
-        self.left = None
-        self.right = None
-        self.val = key
-
-    # Traverse preorder
-    def traversePreOrder(self):
-        print(self.val, end=' ')
-        if self.left:
-            self.left.traversePreOrder()
-        if self.right:
-            self.right.traversePreOrder()
-
-
 @app.route('/pakar/')
 @login_required
 def pakar_page():
     if current_user.type != 'pakar':
         flash('User tidak memiliki hak akses')
         return redirect(url_for('index'))
-
+    
     data_penyakit = Penyakit.query.order_by(Penyakit.id).all()
     data_gejala = Gejala.query.order_by(Gejala.id).all()
     
-    penyakit= []
-    gejala = []
-    for i in data_penyakit:
-        gejala.append(i.id)
-    for i in data_gejala:
-        penyakit.append(i.id)
-    
-    kamus = {
-		'penyakit': penyakit,
-		'gejala':gejala,
-	}
-    root = compute_next(kamus)
-
-    core = Node(1)
-
-    core.left = Node(2)
-    core.right = Node(3)
-
-    core.left.left = Node(4)
-    core.left.right = Node(5)
-
-    example={
-        "point":"Sesak Napas",
-        "kanan":"SAKIT A",
-        "kiri":{
-            "point":"BATUK",
-            "kanan":"SAKIT B",
-            "kiri":"SAKIT C"
-        },
-    }
-
     return render_template(
         'pakar.html', 
         title='Pakar - Dashboard', 
         jml_penyakit=len(data_penyakit), 
         penyakit=data_penyakit, 
-        gejala=data_gejala,
-        root=root,
-        example=example,
-        core=core)
+        gejala=data_gejala,)
 
 @app.route('/pakar/profil/')
 @login_required
@@ -450,20 +439,6 @@ def compute_next(kamus):
                 if count_a < count_b:
                     g_max = b.id
             item = item + 1
-
-    a = Gejala.query.filter(Gejala.id == g_max).one()
-    pjg_penyakit = len(a.penyakit)
-
-    for_mentah_gejala = []
-    for gej in mentah_gejala:
-        if gej != g_max:
-            cari = Gejala.query.filter(Gejala.id == gej).one()
-            if len(cari.penyakit) >= pjg_penyakit:
-                for_mentah_gejala.append(gej)
-        else:
-            for_mentah_gejala.append(gej)
-
-    # mentah_gejala = for_mentah_gejala
         
     penyakit_yes = []
     penyakit_no = []
@@ -515,24 +490,26 @@ def diagnosa():
 	return render_template('tes_diagnosa.html',)
 
 @app.route('/start_diagnosa', methods=['POST', 'GET'])
-def start_diagnosa():
-	daftar_penyakit = Penyakit.query.all()
-	daftar_gejala = Gejala.query.all()
-	penyakit= []
-	gejala = []
-	for i in daftar_gejala:
-		gejala.append(i.id)
-	for i in daftar_penyakit:
-		penyakit.append(i.id)
+def start_diagnosa(): 
+    daftar_penyakit = Penyakit.query.all()
+    daftar_gejala = Gejala.query.all()
+    penyakit= []
+    gejala = []
+    for i in daftar_gejala:
+        gejala.append(i.id)
+    for i in daftar_penyakit:
+        penyakit.append(i.id)
 	
-	print (penyakit)
-	print (gejala)
-	kamus = {
+    print (penyakit)
+    print (gejala)
+    kamus = {
 		'penyakit': penyakit,
 		'gejala':gejala,
 	}
-	results = compute_next(kamus)
-	return jsonify(results)
+    results = compute_next(kamus)
+    print ("RESUTL")
+    print (results)
+    return jsonify(results)
 
 @app.route('/process_ya', methods=['POST', 'GET'])
 def proses_ya():

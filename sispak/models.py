@@ -44,3 +44,9 @@ class Gejala(db.Model):
     gejala = db.Column(db.String(50))
     deskripsi = db.Column(db.Text)
     penyakit = db.relationship("Penyakit", secondary=relasi_tabel)
+
+class BotConfig(db.Model):
+    __tablename__ = 'bot_config'
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(255))
+    url = db.Column(db.String(255))

@@ -51,4 +51,9 @@ class FormPenyakit(FlaskForm):
     penanganan = TextAreaField('Penanganan', validators=[DataRequired()])
     submit = SubmitField('Simpan')
     gejala = MultiCheckboxField('Gejala',coerce=int, )
+
+class FormBotConfig(FlaskForm):
+    token = StringField('Token Bot Telegram', validators=[DataRequired()])
+    url = StringField('URL', validators=[DataRequired()])
+    submit = SubmitField('Simpan')
     
