@@ -16,7 +16,7 @@ from telegram.ext import (
 )
 
 def get_token_bot():
-    botconfig = BotConfig.query.limit(1).all()
+    botconfig = BotConfig.query.all()
     if len(botconfig) > 0:
         botconfig = BotConfig.query.filter_by().first()
         url = "https://api.telegram.org/bot" + str(botconfig.token) +"/getMe"
