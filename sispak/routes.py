@@ -1,10 +1,10 @@
 from flask import render_template, flash, redirect, url_for, session, request, jsonify
 from sispak import app, db
-from sispak.forms import LoginForm, RegistrationForm, ProfilForm, FormGejala, FormPenyakit, FormBotConfig
+from sispak.forms import LoginForm, RegistrationForm, ProfilForm, FormGejala, FormPenyakit
 from wtforms import Label
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from sispak.models import User, Gejala, Penyakit, relasi_tabel, BotConfig
+from sispak.models import User, Gejala, Penyakit, relasi_tabel
 
 @app.errorhandler(404)
 def page_not_found(e):

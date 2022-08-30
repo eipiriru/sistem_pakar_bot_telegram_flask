@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, session, request, jsonify
 from sispak import app, db
-from sispak.models import Gejala, Penyakit, BotConfig
+from sispak.models import Gejala, Penyakit
 
 import re
 import telegram

@@ -52,15 +52,15 @@ class FormPenyakit(FlaskForm):
     submit = SubmitField('Simpan')
     gejala = MultiCheckboxField('Gejala',coerce=int, )
 
-class FormBotConfig(FlaskForm):
-    token = StringField('Token Bot Telegram', validators=[DataRequired()])
-    submit = SubmitField('Simpan')
+# class FormBotConfig(FlaskForm):
+#     token = StringField('Token Bot Telegram', validators=[DataRequired()])
+#     submit = SubmitField('Simpan')
 
-    def validate_token(self, token):
-        url = "https://api.telegram.org/bot" + str(token.data) +"/getMe"
-        headers = {"Accept": "application/json"}
-        response = requests.post(url, headers=headers)
-        result = json.loads(response.text)
-        if not result['ok']:
-            raise ValidationError('Token Not Valid')
+#     def validate_token(self, token):
+#         url = "https://api.telegram.org/bot" + str(token.data) +"/getMe"
+#         headers = {"Accept": "application/json"}
+#         response = requests.post(url, headers=headers)
+#         result = json.loads(response.text)
+#         if not result['ok']:
+#             raise ValidationError('Token Not Valid')
     
