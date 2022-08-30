@@ -30,7 +30,7 @@ def get_token_bot():
     return "5298360325:AAGXkroxsanxc4QWPgb_vHQS-XPAp4yjUV0"
 
 def get_url():
-    return "http://127.0.0.1:5000"
+    return "https://testing-sispak.herokuapp.com"
 
 global bot
 global TOKEN
