@@ -166,42 +166,42 @@ def delete_user(id_user):
     db.session.commit()
     return redirect(url_for('register'))
 
-@app.route('/admin/botconfig/', methods=['GET', 'POST'])
-@login_required
-def admin_botconfig():
-    if current_user.type != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+# @app.route('/admin/botconfig/', methods=['GET', 'POST'])
+# @login_required
+# def admin_botconfig():
+#     if current_user.type != 'admin':
+#         flash('User tidak memiliki hak akses')
+#         return redirect(url_for('index'))
 
-    botconfig = BotConfig.query.limit(1).all()
-    if len(botconfig) > 0:
-        botconfig = BotConfig.query.filter_by().first()
-    return render_template('botconfig.html', title='Admin - Bot Config', edit=False, botconfig = botconfig)
+#     botconfig = BotConfig.query.limit(1).all()
+#     if len(botconfig) > 0:
+#         botconfig = BotConfig.query.filter_by().first()
+#     return render_template('botconfig.html', title='Admin - Bot Config', edit=False, botconfig = botconfig)
 
-@app.route('/admin/botconfig/edit/', methods=['GET', 'POST'])
-@login_required
-def admin_botconfig_edit():
-    if current_user.type != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+# @app.route('/admin/botconfig/edit/', methods=['GET', 'POST'])
+# @login_required
+# def admin_botconfig_edit():
+#     if current_user.type != 'admin':
+#         flash('User tidak memiliki hak akses')
+#         return redirect(url_for('index'))
 
-    botconfig = BotConfig.query.limit(1).all()
-    form = FormBotConfig()
-    if form.validate_on_submit():
-        if len(botconfig) > 0:
-            botconfig = BotConfig.query.filter_by().first()
-            if form.token.data:
-                botconfig.token = form.token.data
-        else:
-            bot = BotConfig(token=form.token.data)
-            db.session.add(bot)
-        db.session.commit()
-        flash('Bot Config diupdate!')
-        return redirect(url_for('admin_botconfig'))
+#     botconfig = BotConfig.query.limit(1).all()
+#     form = FormBotConfig()
+#     if form.validate_on_submit():
+#         if len(botconfig) > 0:
+#             botconfig = BotConfig.query.filter_by().first()
+#             if form.token.data:
+#                 botconfig.token = form.token.data
+#         else:
+#             bot = BotConfig(token=form.token.data)
+#             db.session.add(bot)
+#         db.session.commit()
+#         flash('Bot Config diupdate!')
+#         return redirect(url_for('admin_botconfig'))
 
-    if len(botconfig) > 0:
-        botconfig = BotConfig.query.filter_by().first()
-    return render_template('botconfig.html', title='Admin - Bot Config', edit=True, botconfig = botconfig, form=form)
+#     if len(botconfig) > 0:
+#         botconfig = BotConfig.query.filter_by().first()
+#     return render_template('botconfig.html', title='Admin - Bot Config', edit=True, botconfig = botconfig, form=form)
 
 # PAKAR
 @app.route('/pakar/')

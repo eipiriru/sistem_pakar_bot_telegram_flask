@@ -35,7 +35,7 @@
                         {% endif %}
                         {% if current_user.type == 'admin' %}
                             <a href="{{ url_for('register') }}" class="btn menuitem">DATA PENGGUNA</a>
-                            <a href="{{ url_for('admin_botconfig') }}" class="btn menuitem">BOT CONFIG</a>
+                            <!-- <a href="{{ url_for('admin_botconfig') }}" class="btn menuitem">BOT CONFIG</a> -->
                         {% endif %}
                         {% if current_user.type in ['admin','pakar'] %}
                             <a href="{{ url_for('my_profil') }}" class="btn btn-green menuitem">PROFIL</a>

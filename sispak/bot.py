@@ -16,18 +16,18 @@ from telegram.ext import (
 )
 
 def get_token_bot():
-    botconfig = BotConfig.query.all()
-    if len(botconfig) > 0:
-        botconfig = BotConfig.query.filter_by().first()
-        url = "https://api.telegram.org/bot" + str(botconfig.token) +"/getMe"
-        headers = {"Accept": "application/json"}
-        response = requests.post(url, headers=headers)
-        result = json.loads(response.text)
-        if not result['ok']:
-            pass
-        else:
-            return botconfig.token
-    return "5298360325:AAGXkroxsanxc4QWPgb_vHQS-XPAp4yjUV0"
+    # botconfig = BotConfig.query.all()
+    # if len(botconfig) > 0:
+    #     botconfig = BotConfig.query.filter_by().first()
+    #     url = "https://api.telegram.org/bot" + str(botconfig.token) +"/getMe"
+    #     headers = {"Accept": "application/json"}
+    #     response = requests.post(url, headers=headers)
+    #     result = json.loads(response.text)
+    #     if not result['ok']:
+    #         pass
+    #     else:
+    #         return botconfig.token
+    return "5636164555:AAGLqDncfNNRDxYQTjZ6DkSP-z9fdanzHas"
 
 def get_url():
     return "https://testing-sispak.herokuapp.com"
