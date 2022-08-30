@@ -63,7 +63,7 @@
                     {% for data in data_pengguna %}
                         <tr>
                             <td>{{ data.username }}</td>
-                            <td>{{ data.type }}</td>
+                            <td>{{ data.type_user }}</td>
                             <td>
                                 {% if data != current_user %}
                                     <a href="{{ url_for('delete_user', id_user = data.id) }}" class="btn btn-small btn-red">Hapus</a>
