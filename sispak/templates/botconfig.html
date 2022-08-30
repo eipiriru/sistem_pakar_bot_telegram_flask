@@ -18,16 +18,8 @@
                             {% endfor %}
                         </td>
                     </tr>
-                    <tr>
-                        <td>{{ form.url.label }}<br/><i>Example : https://subdomain.herokuapp.com/</i></td>
-                        <td>
-                            {{ form.url(value=botconfig.url) }}
-                            {% for error in form.url.errors %}
-                                <span style="color: red;">[{{ error }}]</span>
-                            {% endfor %}
-                        </td>
-                    </tr>
                 </table>
+                <i>Jika Tidak diisi akan menggunakan Bot Telegram default dengan Token <br/>5298360325:AAGXkroxsanxc4QWPgb_vHQS-XPAp4yjUV0</i>
             </form>
         {% else %}
             <h3>Bot Config </h3><br/>
@@ -39,13 +31,8 @@
                         <input type="text" value="{{ botconfig.token }}" readonly=readonly/>
                     </td>
                 </tr>
-                <tr>
-                    <td>URL<br/><i>Example : https://subdomain.herokuapp.com/</i></td>
-                    <td>
-                        <input type="text" value="{{ botconfig.url }}" readonly=readonly/>
-                    </td>
-                </tr>
             </table>
+            <i>Jika Tidak diisi akan menggunakan Bot Telegram default dengan Token <br/>5298360325:AAGXkroxsanxc4QWPgb_vHQS-XPAp4yjUV0</i>
         {% endif %}
     </div>
     <div class="isi_data">

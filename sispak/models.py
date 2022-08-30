@@ -49,4 +49,3 @@ class BotConfig(db.Model):
     __tablename__ = 'bot_config'
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(255))
-    url = db.Column(db.String(255))

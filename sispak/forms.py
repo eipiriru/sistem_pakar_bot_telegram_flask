@@ -1,9 +1,9 @@
-from faulthandler import disable
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, TextAreaField, SelectMultipleField, widgets
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from sispak.models import User, Gejala
 from flask_login import current_user
+import requests, json
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -54,6 +54,13 @@ class FormPenyakit(FlaskForm):
 
 class FormBotConfig(FlaskForm):
     token = StringField('Token Bot Telegram', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired()])
     submit = SubmitField('Simpan')
+
+    def validate_token(self, token):
+        url = "https://api.telegram.org/bot" + str(token.data) +"/getMe"
+        headers = {"Accept": "application/json"}
+        response = requests.post(url, headers=headers)
+        result = json.loads(response.text)
+        if not result['ok']:
+            raise ValidationError('Token Not Valid')
     

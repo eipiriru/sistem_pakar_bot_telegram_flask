@@ -192,10 +192,8 @@ def admin_botconfig_edit():
             botconfig = BotConfig.query.filter_by().first()
             if form.token.data:
                 botconfig.token = form.token.data
-            if form.url.data:
-                botconfig.url = form.url.data
         else:
-            bot = BotConfig(token=form.token.data, url=form.url.data)
+            bot = BotConfig(token=form.token.data)
             db.session.add(bot)
         db.session.commit()
         flash('Bot Config diupdate!')

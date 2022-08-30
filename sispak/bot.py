@@ -4,7 +4,7 @@ from sispak.models import Gejala, Penyakit, BotConfig
 
 import re
 import telegram
-import json
+import json, requests
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import (
     Updater,
@@ -19,15 +19,18 @@ def get_token_bot():
     botconfig = BotConfig.query.limit(1).all()
     if len(botconfig) > 0:
         botconfig = BotConfig.query.filter_by().first()
-        return botconfig.token
-    return ""
+        url = "https://api.telegram.org/bot" + str(botconfig.token) +"/getMe"
+        headers = {"Accept": "application/json"}
+        response = requests.post(url, headers=headers)
+        result = json.loads(response.text)
+        if not result['ok']:
+            pass
+        else:
+            return botconfig.token
+    return "5298360325:AAGXkroxsanxc4QWPgb_vHQS-XPAp4yjUV0"
 
 def get_url():
-    botconfig = BotConfig.query.limit(1).all()
-    if len(botconfig) > 0:
-        botconfig = BotConfig.query.filter_by().first()
-        return botconfig.url
-    return ""
+    return "http://127.0.0.1:5000"
 
 global bot
 global TOKEN
