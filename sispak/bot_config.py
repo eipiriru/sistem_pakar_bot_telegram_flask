@@ -27,7 +27,7 @@ def get_token_bot():
     #         pass
     #     else:
     #         return botconfig.token
-    return "5636164555:AAGLqDncfNNRDxYQTjZ6DkSP-z9fdanzHas"
+    return "5526047495:AAFRfobZMINH4QZXrASmoBm4YzeumM6N1Hk"
 
 def get_url():
     return "https://testing-ta.herokuapp.com/"
