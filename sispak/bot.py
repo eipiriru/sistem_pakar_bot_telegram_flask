@@ -38,40 +38,44 @@ class UserNew:
 		self.gejala_tidak = None
 		self.bio = None
 
+def respond_start(update: Update, context: CallbackContext) -> int:
+    reply_keyboard = [['/cancel', '/cancel']]
+
+    update.message.reply_text(
+        'Hi! This Pakar Bot. I will hold a conversation with you. '
+        'Send /cancel to stop talking to me.\n\n'
+        'Choose Menu?',
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+        ),
+    )
+
+    return ConversationHandler.END
+
+def cancel(update: Update, context: CallbackContext) -> int:
+	"""Cancels and ends the conversation."""
+	reply_keyboard = ['/start']
+	user = update.message.from_user
+	update.message.reply_text(
+        'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True,
+        )
+    )
+	return ConversationHandler.END
+
+conv_handler = ConversationHandler(
+    entry_points=[CommandHandler('start', respond_start)],
+    states={
+    },
+    fallbacks=[CommandHandler('cancel', cancel)],
+)
+
+dispatcher.add_handler(conv_handler)
+
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
 	update = telegram.Update.de_json(request.get_json(force=True), bot)
-
 	updater.start_polling()
-
-	chat_id = update.message.chat.id
-	msg_id = update.message.message_id
-	
-	user = update.message.from_user
-	print (user)
-	chatNew_id = user.id
-	userNew = UserNew(user.first_name)
-	user_dict[chatNew_id] = userNew
-	
-	text = update.message.text.encode('utf-8').decode()
-	
-	if text == "/start":
-		bot.sendMessage(chat_id=chat_id, text="Hello World", reply_to_message_id=msg_id)
-		# respond_start(chat_id,msg_id,userNew)
-	# elif text == "/help":
-	# 	respond_help(chat_id,msg_id,user_dict)
-	# elif text == "/siswa":
-	# 	get_siswa(chat_id,msg_id)
-	else:
-		try:
-			text = re.sub(r"\W", "_", text)
-			url = "https://api.adorable.io/avatars/285/{}.png".format(text.strip())
-			# bot.sendPhoto(chat_id=chat_id, photo=url, reply_to_message_id=msg_id)
-			bot_msg = "You said in "+text
-			bot.sendMessage(chat_id=chat_id, text=bot_msg, reply_to_message_id=msg_id)
-		except Exception:
-			# if things went wrong
-			bot.sendMessage(chat_id=chat_id, text="There was a problem in the name you used, please enter different name", reply_to_message_id=msg_id)
 	return 'ok'
 
 @app.route('/bottelegram', methods=['GET', 'POST'])
