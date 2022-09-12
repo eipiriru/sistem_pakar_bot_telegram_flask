@@ -151,7 +151,7 @@ def compute_next(kamus):
         'solusi' : solusi,
 	}
     return results
-    
+
 def respond_diagnosa(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
     chat_id = user.id
@@ -228,7 +228,7 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
                 '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':**\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
                 '**Solusi yang dapat ditawarkan MeowBot untuk kucing kamu :**\n'
-                '' + update_kamus['penanganan'] + '\n'
+                '' + update_kamus['solusi'] + '\n'
             )
 			update.message.reply_text(
                 'Semoga kucing kamu baik-baik saja..\n'
@@ -262,7 +262,7 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
                 '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':**\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
                 '**Solusi yang dapat ditawarkan MeowBot untuk kucing kamu :**\n'
-                '' + update_kamus['penanganan'] + '\n'
+                '' + update_kamus['solusi'] + '\n'
             )
 			update.message.reply_text(
                 'Semoga kucing kamu baik-baik saja..\n'
