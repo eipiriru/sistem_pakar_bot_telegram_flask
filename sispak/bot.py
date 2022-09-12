@@ -137,10 +137,10 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 def cancel(update: Update, context: CallbackContext) -> int:
 	"""Cancels and ends the conversation."""
-	reply_keyboard = [['/mulai_diagnosa']['/info']]
+	reply_keyboard = [['/start']]
 	user = update.message.from_user
 	update.message.reply_text(
-        'Okee..', reply_markup=ReplyKeyboardMarkup(
+        'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardMarkup(
             reply_keyboard, one_time_keyboard=True,
         )
     )
@@ -149,6 +149,13 @@ def cancel(update: Update, context: CallbackContext) -> int:
 run_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
+        GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
+        PHOTO: [MessageHandler(Filters.photo, photo), CommandHandler('skip', skip_photo)],
+        LOCATION: [
+            MessageHandler(Filters.location, location),
+            CommandHandler('skip', skip_location),
+        ],
+        BIO: [MessageHandler(Filters.text & ~Filters.command, bio)],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
