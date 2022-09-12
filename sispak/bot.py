@@ -43,7 +43,7 @@ def start(update: Update, context: CallbackContext) -> int:
     reply_keyboard = [['/mulai_diagnosa']['/info']]
 
     update.message.reply_text(
-        'Hi..! Selamat datang di MeowBot.\n'
+        'Hi..! Selamat datang di **MeowBot**.\n'
         'Disini kamu bisa melakukan diagnosa awal pada penyakit yang diderita kucing kamu.\n\n'
         'Pilih menu /diagnosa untuk memulai diagnosa penyakit kucing kamu.\n'
         'Pilih menu /info untuk lebih kenal sama MeowBot.\n',
