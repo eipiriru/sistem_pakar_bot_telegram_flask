@@ -2,7 +2,6 @@ from flask import render_template, flash, redirect, url_for, session, request, j
 from sispak import app, db
 from sispak.models import Gejala, Penyakit
 from sispak.bot_config import TOKEN,URL
-from sispak.routes import compute_next
 
 import re
 import telegram
@@ -66,6 +65,93 @@ def cancel(update: Update, context: CallbackContext) -> int:
     )
 	return ConversationHandler.END
 
+def compute_next(kamus):
+    mentah_penyakit = kamus['penyakit']
+    mentah_gejala = kamus['gejala']
+    gejala = Gejala.query.filter(Gejala.id.in_(mentah_gejala)).all()
+    panjang_penyakit = len(mentah_penyakit)
+    g_max = 0
+    item = 0
+    for i in gejala:
+        c = Gejala.query.filter(Gejala.id == i.id).one()
+        print (c.gejala)
+        print (len(c.penyakit))
+        if item == 0:
+            a = Gejala.query.filter(Gejala.id == i.id).one()
+            if len(a.penyakit) == panjang_penyakit:
+                continue
+            g_max = i.id
+            item = item + 1
+        else:
+            a = Gejala.query.filter(Gejala.id == g_max).one()
+            a_penyakit = [ i.id for i in a.penyakit]
+            count_a = 0
+            for j in mentah_penyakit:
+                if j in a_penyakit:
+                    count_a = count_a + 1
+            b = Gejala.query.filter(Gejala.id == i.id).one()
+            b_penyakit = [ i.id for i in b.penyakit]
+            count_b = 0
+            for j in mentah_penyakit:
+                if j in b_penyakit:
+                    count_b = count_b + 1
+
+            if count_b < panjang_penyakit:
+                if count_a < count_b:
+                    g_max = b.id
+            item = item + 1
+        
+    penyakit_yes = []
+    penyakit_no = []
+    
+    next_gejala = Gejala.query.filter(Gejala.id == g_max).one()
+    penyakit_in_next_gejala = [ i.id for i in next_gejala.penyakit ]
+    for i in mentah_penyakit:
+        if i in penyakit_in_next_gejala:
+            penyakit_yes.append(i)
+        else:
+            penyakit_no.append(i)
+            
+    mentah_gejala.remove(g_max)
+    sisa_gejala = Gejala.query.filter(Gejala.id.in_(mentah_gejala)).all()
+    
+    gejala_yes = []
+    gejala_no = []
+	
+    for i in sisa_gejala:
+        for j in i.penyakit:
+            if j in next_gejala.penyakit:
+                gejala_yes.append(i.id)
+                break
+
+    for i in sisa_gejala:
+        for j in i.penyakit:
+            if j not in next_gejala.penyakit:
+                gejala_no.append(i.id)
+                break
+
+    pertanyaan = next_gejala.gejala
+    message = "belum"
+    deskripsi = "belum"
+    solusi = "belum"
+    if len(mentah_penyakit) == 1:
+        penyakit = Penyakit.query.filter(Penyakit.id == mentah_penyakit[0]).one()
+        pertanyaan = penyakit.penyakit
+        message = "sudah"
+        deskripsi = penyakit.deskripsi
+        solusi = penyakit.penanganan
+    results = {
+		'penyakit_yes' : penyakit_yes,
+		'penyakit_no' : penyakit_no,
+		'gejala_yes' : gejala_yes,
+		'gejala_no' : gejala_no,
+		'pertanyaan' : pertanyaan,
+		'message' : message,
+        'deskripsi' : deskripsi,
+        'solusi' : solusi,
+	}
+    return results
+    
 def respond_diagnosa(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
     chat_id = user.id
