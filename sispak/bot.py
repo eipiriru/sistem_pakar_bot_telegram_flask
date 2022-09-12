@@ -39,8 +39,8 @@ class UserNew:
 		self.bio = None
 
 def start(update: Update, context: CallbackContext) -> int:
-    """Starts the conversation"""
-    reply_keyboard = [['/mulai_diagnosa']['/info']]
+    """Starts the conversation and asks the user about their gender."""
+    reply_keyboard = [[['Boy', 'Girl', 'Other']]]
 
     update.message.reply_text(
         'Hi..! Selamat datang di **MeowBot**.\n'
@@ -48,11 +48,11 @@ def start(update: Update, context: CallbackContext) -> int:
         'Pilih menu /diagnosa untuk memulai diagnosa penyakit kucing kamu.\n'
         'Pilih menu /info untuk lebih kenal sama MeowBot.\n',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, input_field_placeholder='Pilih Menu'
+            reply_keyboard, one_time_keyboard=True, input_field_placeholder='Boy or Girl?'
         ),
     )
 
-    return ConversationHandler.END
+    return GENDER
 
 
 def gender(update: Update, context: CallbackContext) -> int:
