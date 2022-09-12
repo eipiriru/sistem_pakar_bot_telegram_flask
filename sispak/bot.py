@@ -41,7 +41,7 @@ class UserNew:
 
 def start(update: Update, context: CallbackContext) -> int:
     """Starts the conversation"""
-    reply_keyboard = [['/mulai_diagnosa'],['/info']]
+    reply_keyboard = [['/diagnosa'],['/info']]
 
     update.message.reply_text(
         'Hi..! Selamat datang di MeowBot.\n'
@@ -57,7 +57,7 @@ def start(update: Update, context: CallbackContext) -> int:
 
 def cancel(update: Update, context: CallbackContext) -> int:
 	"""Cancels and ends the conversation."""
-	reply_keyboard = [['/mulai_diagnosa'],['/info']]
+	reply_keyboard = [['/diagnosa'],['/info']]
 	user = update.message.from_user
 	update.message.reply_text(
         'Okee..', reply_markup=ReplyKeyboardMarkup(
@@ -75,7 +75,6 @@ def respond_diagnosa(update: Update, context: CallbackContext) -> int:
 		Untuk proses diagnosa, tanggapi Pertanyaan yang muncul dengan menekan tombol YA / TIDAK yang tersedia, tekan /cancel untuk membatalkan proses diagnosa
 	"""
     bot.sendMessage(chat_id=chat_id, text=message)
-    bot.sendMessage(chat_id=chat_id, text="Mohon tunguu... \nSedang Memuat pertanyaan...")
     daftar_penyakit = Penyakit.query.all()
     daftar_gejala = Gejala.query.all()
     penyakit= []
@@ -119,7 +118,7 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 
 	if text_chat == 'YA':
 		reply_keyboard = [['YA', 'TIDAK']]
-		reply_keyboard1 = [['/mulai_diagnosa'],['/info']]
+		reply_keyboard1 = [['/diagnosa'],['/info']]
 		reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
 		reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
 		kamus = {
@@ -153,7 +152,7 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 			return ConversationHandler.END
 	elif text_chat == 'TIDAK':
 		reply_keyboard = [['YA', 'TIDAK']]
-		reply_keyboard1 = [['/mulai_diagnosa'],['/info']]
+		reply_keyboard1 = [['/diagnosa'],['/info']]
 		reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
 		reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
 		kamus = {
@@ -187,7 +186,7 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 			return ConversationHandler.END
 
 def respond_info(update: Update, context: CallbackContext) -> int:
-    reply_keyboard = [['/penyakit', '/diagnosa']]
+    reply_keyboard = [['/diagnosa'],['/info']]
 
     penyakit = Penyakit.query.all()
     daftar_penyakit = ""
@@ -197,11 +196,11 @@ def respond_info(update: Update, context: CallbackContext) -> int:
     update.message.reply_text(
         'Hi..! Selamat datang di MeowBot.\n'
         'Kenalin aku MeowBot\n'
-        'Disini kamu bisa melakukan diagnosa awal pada penyakit yang diderita kucing kamu.\n'
-        'Tapi penyakit kucing yang dapat didiagnosa oleh MeowBot masih terbatas, karena MeowBot masih belajar!!\n'
+        'Disini kamu bisa melakukan diagnosa awal pada penyakit yang diderita kucing kamu.\n\n'
+        'Tapi penyakit kucing yang dapat didiagnosa oleh MeowBot masih terbatas, karena MeowBot masih belajar\n\n'
         'Sementara ini penyakit kucing yang dapat didiagnosa oleh MeowBot, terbatas pada penyakit\n'
         '' + daftar_penyakit + '\n'
-        'Perlu diingat, MeowBot hanya melakukan diagnosa dini pada penyakit kucing kamu, sehingga belum 100 persen akurat.\n'
+        '\nPerlu diingat, MeowBot hanya melakukan diagnosa dini pada penyakit kucing kamu, sehingga belum 100 persen akurat.\n\n'
         'Untuk informasi yang lebih akurat, kamu bisa membawa kucing kamu ke dokter hewan terdekat.\n',
     )
     update.message.reply_text(
