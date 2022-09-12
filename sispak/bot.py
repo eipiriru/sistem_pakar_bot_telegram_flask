@@ -39,8 +39,8 @@ class UserNew:
 		self.bio = None
 
 def start(update: Update, context: CallbackContext) -> int:
-    """Starts the conversation and asks the user about their gender."""
-    reply_keyboard = [['Boy', 'Girl', 'Other']]
+    """Starts the conversation"""
+    reply_keyboard = [['/mulai_diagnosa']['/info']]
 
     update.message.reply_text(
         'Hi..! Selamat datang di MeowBot.\n'
@@ -48,11 +48,11 @@ def start(update: Update, context: CallbackContext) -> int:
         'Pilih menu /diagnosa untuk memulai diagnosa penyakit kucing kamu.\n'
         'Pilih menu /info untuk lebih kenal sama MeowBot.\n',
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, input_field_placeholder='Boy or Girl?'
+            reply_keyboard, one_time_keyboard=True, input_field_placeholder='Pilih Menu'
         ),
     )
 
-    return GENDER
+    return ConversationHandler.END
 
 
 def gender(update: Update, context: CallbackContext) -> int:
@@ -137,10 +137,10 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 def cancel(update: Update, context: CallbackContext) -> int:
 	"""Cancels and ends the conversation."""
-	reply_keyboard = [['/start']]
+	reply_keyboard = [['/mulai_diagnosa']['/info']]
 	user = update.message.from_user
 	update.message.reply_text(
-        'Bye! I hope we can talk again some day.', reply_markup=ReplyKeyboardMarkup(
+        'Okee..', reply_markup=ReplyKeyboardMarkup(
             reply_keyboard, one_time_keyboard=True,
         )
     )
@@ -149,13 +149,6 @@ def cancel(update: Update, context: CallbackContext) -> int:
 run_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
-        GENDER: [MessageHandler(Filters.regex('^(Boy|Girl|Other)$'), gender)],
-        PHOTO: [MessageHandler(Filters.photo, photo), CommandHandler('skip', skip_photo)],
-        LOCATION: [
-            MessageHandler(Filters.location, location),
-            CommandHandler('skip', skip_location),
-        ],
-        BIO: [MessageHandler(Filters.text & ~Filters.command, bio)],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
