@@ -40,10 +40,10 @@ class UserNew:
 
 def start(update: Update, context: CallbackContext) -> int:
     """Starts the conversation and asks the user about their gender."""
-    reply_keyboard = [[['Boy', 'Girl', 'Other']]]
+    reply_keyboard = [['Boy', 'Girl', 'Other']]
 
     update.message.reply_text(
-        'Hi..! Selamat datang di **MeowBot**.\n'
+        'Hi..! Selamat datang di MeowBot.\n'
         'Disini kamu bisa melakukan diagnosa awal pada penyakit yang diderita kucing kamu.\n\n'
         'Pilih menu /diagnosa untuk memulai diagnosa penyakit kucing kamu.\n'
         'Pilih menu /info untuk lebih kenal sama MeowBot.\n',
