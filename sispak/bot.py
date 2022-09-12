@@ -225,9 +225,9 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 		elif update_kamus['message'] == 'sudah':
 			update.message.reply_text(
                 'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit ' + update_kamus['pertanyaan'] + '.\n\n'
-                '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':**\n'
+                '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
-                '**Solusi yang dapat ditawarkan MeowBot untuk kucing kamu :**\n'
+                '**Solusi yang ditawarkan MeowBot untuk kucing kamu :\n'
                 '' + update_kamus['solusi'] + '\n'
             )
 			update.message.reply_text(
@@ -258,10 +258,10 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 			return PROSES
 		elif update_kamus['message'] == 'sudah':
 			update.message.reply_text(
-                'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit' + update_kamus['pertanyaan'] + '.\n\n'
-                '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':**\n'
+                'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit ' + update_kamus['pertanyaan'] + '.\n\n'
+                '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
-                '**Solusi yang dapat ditawarkan MeowBot untuk kucing kamu :**\n'
+                '**Solusi yang ditawarkan MeowBot untuk kucing kamu :\n'
                 '' + update_kamus['solusi'] + '\n'
             )
 			update.message.reply_text(
