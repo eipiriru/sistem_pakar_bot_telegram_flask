@@ -224,7 +224,7 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 			return PROSES
 		elif update_kamus['message'] == 'sudah':
 			update.message.reply_text(
-                'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit' + update_kamus['pertanyaan'] + '.\n\n'
+                'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit ' + update_kamus['pertanyaan'] + '.\n\n'
                 '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':**\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
                 '**Solusi yang dapat ditawarkan MeowBot untuk kucing kamu :**\n'
@@ -242,8 +242,8 @@ def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
 		reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
 		reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
 		kamus = {
-			'penyakit': userNew.penyakit_ya,
-			'gejala':userNew.gejala_ya,
+			'penyakit': userNew.penyakit_tidak,
+			'gejala':userNew.gejala_tidak,
 		}
 		update_kamus = compute_next(kamus)
 		if update_kamus['message'] == 'belum':
