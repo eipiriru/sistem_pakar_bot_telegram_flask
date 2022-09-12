@@ -43,9 +43,10 @@ def start(update: Update, context: CallbackContext) -> int:
     reply_keyboard = [['Boy', 'Girl', 'Other']]
 
     update.message.reply_text(
-        'Hi! My name is Professor Bot. I will hold a conversation with you. '
-        'Send /cancel to stop talking to me.\n\n'
-        'Are you a boy or a girl?',
+        'Hi..! Selamat datang di MeowBot.\n'
+        'Disini kamu bisa melakukan diagnosa awal pada penyakit yang diderita kucing kamu.\n\n'
+        'Pilih menu /diagnosa untuk memulai diagnosa penyakit kucing kamu.\n'
+        'Pilih menu /info untuk lebih kenal sama MeowBot.\n',
         reply_markup=ReplyKeyboardMarkup(
             reply_keyboard, one_time_keyboard=True, input_field_placeholder='Boy or Girl?'
         ),
