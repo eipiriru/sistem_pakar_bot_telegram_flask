@@ -469,17 +469,23 @@ def compute_next(kamus):
 
     pertanyaan = next_gejala.gejala
     message = "belum"
+    deskripsi = "belum"
+    solusi = "belum"
     if len(mentah_penyakit) == 1:
         penyakit = Penyakit.query.filter(Penyakit.id == mentah_penyakit[0]).one()
         pertanyaan = penyakit.penyakit
         message = "sudah"
+        deskripsi = penyakit.deskripsi
+        solusi = penyakit.penanganan
     results = {
-		'penyakit_yes': penyakit_yes,
-		'penyakit_no':penyakit_no,
-		'gejala_yes':gejala_yes,
-		'gejala_no':gejala_no,
-		'pertanyaan':pertanyaan,
-		'message':message,
+		'penyakit_yes' : penyakit_yes,
+		'penyakit_no' : penyakit_no,
+		'gejala_yes' : gejala_yes,
+		'gejala_no' : gejala_no,
+		'pertanyaan' : pertanyaan,
+		'message' : message,
+        'deskripsi' : deskripsi,
+        'solusi' : solusi,
 	}
     return results
 

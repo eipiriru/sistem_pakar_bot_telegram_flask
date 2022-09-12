@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, TextAreaField, SelectMultipleField, widgets
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from sispak.models import User, Gejala
 from flask_login import current_user
 import requests, json
@@ -46,7 +46,7 @@ class MultiCheckboxField(SelectMultipleField):
 
 class FormPenyakit(FlaskForm):
     kode = StringField('Kode Penyakit', validators=[DataRequired()])
-    penyakit = StringField('Nama Penyakit', validators=[DataRequired()])
+    penyakit = StringField('Nama Penyakit', validators=[DataRequired(), Length(min=1, max=50)])
     deskripsi = TextAreaField('Deskripsi', validators=[DataRequired()])
     penanganan = TextAreaField('Penanganan', validators=[DataRequired()])
     submit = SubmitField('Simpan')
