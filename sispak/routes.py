@@ -440,53 +440,70 @@ def compute_next(kamus):
         
     penyakit_yes = []
     penyakit_no = []
-    
-    next_gejala = Gejala.query.filter(Gejala.id == g_max).one()
-    penyakit_in_next_gejala = [ i.id for i in next_gejala.penyakit ]
-    for i in mentah_penyakit:
-        if i in penyakit_in_next_gejala:
-            penyakit_yes.append(i)
-        else:
-            penyakit_no.append(i)
-            
-    mentah_gejala.remove(g_max)
-    sisa_gejala = Gejala.query.filter(Gejala.id.in_(mentah_gejala)).all()
-    
     gejala_yes = []
     gejala_no = []
-	
-    for i in sisa_gejala:
-        for j in i.penyakit:
-            if j in next_gejala.penyakit:
-                gejala_yes.append(i.id)
-                break
-
-    for i in sisa_gejala:
-        for j in i.penyakit:
-            if j not in next_gejala.penyakit:
-                gejala_no.append(i.id)
-                break
-
-    pertanyaan = next_gejala.gejala
+    pertanyaan = "belum"
     message = "belum"
     deskripsi = "belum"
     solusi = "belum"
-    if len(mentah_penyakit) == 1:
-        penyakit = Penyakit.query.filter(Penyakit.id == mentah_penyakit[0]).one()
-        pertanyaan = penyakit.penyakit
-        message = "sudah"
-        deskripsi = penyakit.deskripsi
-        solusi = penyakit.penanganan
-    results = {
-		'penyakit_yes' : penyakit_yes,
-		'penyakit_no' : penyakit_no,
-		'gejala_yes' : gejala_yes,
-		'gejala_no' : gejala_no,
-		'pertanyaan' : pertanyaan,
-		'message' : message,
-        'deskripsi' : deskripsi,
-        'solusi' : solusi,
-	}
+
+    if g_max != 0:
+        next_gejala = Gejala.query.filter(Gejala.id == g_max).one()
+        penyakit_in_next_gejala = [ i.id for i in next_gejala.penyakit ]
+        for i in mentah_penyakit:
+            if i in penyakit_in_next_gejala:
+                penyakit_yes.append(i)
+            else:
+                penyakit_no.append(i)
+                
+        mentah_gejala.remove(g_max)
+        sisa_gejala = Gejala.query.filter(Gejala.id.in_(mentah_gejala)).all()
+        
+        for i in sisa_gejala:
+            for j in i.penyakit:
+                if j in next_gejala.penyakit:
+                    gejala_yes.append(i.id)
+                    break
+
+        for i in sisa_gejala:
+            for j in i.penyakit:
+                if j not in next_gejala.penyakit:
+                    gejala_no.append(i.id)
+                    break
+
+        pertanyaan = next_gejala.gejala
+        message = "belum"
+        deskripsi = "belum"
+        solusi = "belum"
+        if len(mentah_penyakit) == 1:
+            penyakit = Penyakit.query.filter(Penyakit.id == mentah_penyakit[0]).one()
+            pertanyaan = penyakit.penyakit
+            message = "sudah"
+            deskripsi = penyakit.deskripsi
+            solusi = penyakit.penanganan
+        results = {
+            'penyakit_yes' : penyakit_yes,
+            'penyakit_no' : penyakit_no,
+            'gejala_yes' : gejala_yes,
+            'gejala_no' : gejala_no,
+            'pertanyaan' : pertanyaan,
+            'message' : message,
+            'deskripsi' : deskripsi,
+            'solusi' : solusi,
+        }
+    else:
+        pertanyaan = "Tidak dapat mendeteksi penyakit"
+        message = "nothing"
+        results = {
+            'penyakit_yes' : penyakit_yes,
+            'penyakit_no' : penyakit_no,
+            'gejala_yes' : gejala_yes,
+            'gejala_no' : gejala_no,
+            'pertanyaan' : pertanyaan,
+            'message' : message,
+            'deskripsi' : deskripsi,
+            'solusi' : solusi,
+        }
     return results
 
 @app.route('/diagnosa', methods=['GET','POST'])

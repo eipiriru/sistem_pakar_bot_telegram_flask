@@ -103,53 +103,70 @@ def compute_next(kamus):
         
     penyakit_yes = []
     penyakit_no = []
-    
-    next_gejala = Gejala.query.filter(Gejala.id == g_max).one()
-    penyakit_in_next_gejala = [ i.id for i in next_gejala.penyakit ]
-    for i in mentah_penyakit:
-        if i in penyakit_in_next_gejala:
-            penyakit_yes.append(i)
-        else:
-            penyakit_no.append(i)
-            
-    mentah_gejala.remove(g_max)
-    sisa_gejala = Gejala.query.filter(Gejala.id.in_(mentah_gejala)).all()
-    
     gejala_yes = []
     gejala_no = []
-	
-    for i in sisa_gejala:
-        for j in i.penyakit:
-            if j in next_gejala.penyakit:
-                gejala_yes.append(i.id)
-                break
-
-    for i in sisa_gejala:
-        for j in i.penyakit:
-            if j not in next_gejala.penyakit:
-                gejala_no.append(i.id)
-                break
-
-    pertanyaan = next_gejala.gejala
+    pertanyaan = "belum"
     message = "belum"
     deskripsi = "belum"
     solusi = "belum"
-    if len(mentah_penyakit) == 1:
-        penyakit = Penyakit.query.filter(Penyakit.id == mentah_penyakit[0]).one()
-        pertanyaan = penyakit.penyakit
-        message = "sudah"
-        deskripsi = penyakit.deskripsi
-        solusi = penyakit.penanganan
-    results = {
-		'penyakit_yes' : penyakit_yes,
-		'penyakit_no' : penyakit_no,
-		'gejala_yes' : gejala_yes,
-		'gejala_no' : gejala_no,
-		'pertanyaan' : pertanyaan,
-		'message' : message,
-        'deskripsi' : deskripsi,
-        'solusi' : solusi,
-	}
+
+    if g_max != 0:
+        next_gejala = Gejala.query.filter(Gejala.id == g_max).one()
+        penyakit_in_next_gejala = [ i.id for i in next_gejala.penyakit ]
+        for i in mentah_penyakit:
+            if i in penyakit_in_next_gejala:
+                penyakit_yes.append(i)
+            else:
+                penyakit_no.append(i)
+                
+        mentah_gejala.remove(g_max)
+        sisa_gejala = Gejala.query.filter(Gejala.id.in_(mentah_gejala)).all()
+        
+        for i in sisa_gejala:
+            for j in i.penyakit:
+                if j in next_gejala.penyakit:
+                    gejala_yes.append(i.id)
+                    break
+
+        for i in sisa_gejala:
+            for j in i.penyakit:
+                if j not in next_gejala.penyakit:
+                    gejala_no.append(i.id)
+                    break
+
+        pertanyaan = next_gejala.gejala
+        message = "belum"
+        deskripsi = "belum"
+        solusi = "belum"
+        if len(mentah_penyakit) == 1:
+            penyakit = Penyakit.query.filter(Penyakit.id == mentah_penyakit[0]).one()
+            pertanyaan = penyakit.penyakit
+            message = "sudah"
+            deskripsi = penyakit.deskripsi
+            solusi = penyakit.penanganan
+        results = {
+            'penyakit_yes' : penyakit_yes,
+            'penyakit_no' : penyakit_no,
+            'gejala_yes' : gejala_yes,
+            'gejala_no' : gejala_no,
+            'pertanyaan' : pertanyaan,
+            'message' : message,
+            'deskripsi' : deskripsi,
+            'solusi' : solusi,
+        }
+    else:
+        pertanyaan = "Tidak dapat mendeteksi penyakit"
+        message = "nothing"
+        results = {
+            'penyakit_yes' : penyakit_yes,
+            'penyakit_no' : penyakit_no,
+            'gejala_yes' : gejala_yes,
+            'gejala_no' : gejala_no,
+            'pertanyaan' : pertanyaan,
+            'message' : message,
+            'deskripsi' : deskripsi,
+            'solusi' : solusi,
+        }
     return results
 
 def respond_diagnosa(update: Update, context: CallbackContext) -> int:
@@ -196,80 +213,100 @@ def respond_diagnosa(update: Update, context: CallbackContext) -> int:
     return PROSES
 
 def respond_proses_diagnosa(update: Update, context: CallbackContext) -> int:
-	user = update.message.from_user
-	chat_id = user.id
-	msg_id = update.message.message_id
-	userNew = user_dict[chat_id]
-	text_chat = update.message.text
-
-	if text_chat == 'YA':
-		reply_keyboard = [['YA', 'TIDAK']]
-		reply_keyboard1 = [['/diagnosa'],['/info']]
-		reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
-		reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
-		kamus = {
+    user = update.message.from_user
+    chat_id = user.id
+    msg_id = update.message.message_id
+    userNew = user_dict[chat_id]
+    text_chat = update.message.text
+    
+    if text_chat == 'YA':
+        reply_keyboard = [['YA', 'TIDAK']]
+        reply_keyboard1 = [['/diagnosa'],['/info']]
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
+        reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
+        kamus = {
 			'penyakit': userNew.penyakit_ya,
 			'gejala':userNew.gejala_ya,
 		}
-		update_kamus = compute_next(kamus)
-		if update_kamus['message'] == 'belum':
-			userNew.penyakit_ya = update_kamus['penyakit_yes']
-			userNew.penyakit_tidak = update_kamus['penyakit_no']
-			userNew.gejala_ya = update_kamus['gejala_yes']
-			userNew.gejala_tidak = update_kamus['gejala_no']
-			userNew.gejala_next = update_kamus['pertanyaan']
-			update.message.reply_text(
+        update_kamus = compute_next(kamus)
+        if update_kamus['message'] == 'belum':
+            userNew.penyakit_ya = update_kamus['penyakit_yes']
+            userNew.penyakit_tidak = update_kamus['penyakit_no']
+            userNew.gejala_ya = update_kamus['gejala_yes']
+            userNew.gejala_tidak = update_kamus['gejala_no']
+            userNew.gejala_next = update_kamus['pertanyaan']
+            update.message.reply_text(
                 'Apakah kucing kamu mengalami gejala **' + update_kamus['pertanyaan'] + '**',
                 reply_markup=reply_markup)
-			return PROSES
-		elif update_kamus['message'] == 'sudah':
-			update.message.reply_text(
+            return PROSES
+        elif update_kamus['message'] == 'nothing':
+            update.message.reply_text(
+                'Mohon maaf, MeowBot tidak dapat menemukan penyakit yang diderita kucing kamu :(\n\n'
+                'MeowBot akan belajar lebih giat lagi..'
+            )
+            update.message.reply_text(
+                'Semoga kucing kamu baik-baik saja..\n',
+                reply_markup=reply_markup1
+            )
+            return ConversationHandler.END
+        elif update_kamus['message'] == 'sudah':
+            update.message.reply_text(
                 'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit ' + update_kamus['pertanyaan'] + '.\n\n'
                 '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
                 '**Solusi yang ditawarkan MeowBot untuk kucing kamu :\n'
                 '' + update_kamus['solusi'] + '\n'
             )
-			update.message.reply_text(
+            update.message.reply_text(
                 'Semoga kucing kamu baik-baik saja..\n'
                 'Terima kasih sudah menggunakanku',
                 reply_markup=reply_markup1
             )
-			return ConversationHandler.END
-	elif text_chat == 'TIDAK':
-		reply_keyboard = [['YA', 'TIDAK']]
-		reply_keyboard1 = [['/diagnosa'],['/info']]
-		reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
-		reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
-		kamus = {
+            return ConversationHandler.END
+    elif text_chat == 'TIDAK':
+        reply_keyboard = [['YA', 'TIDAK']]
+        reply_keyboard1 = [['/diagnosa'],['/info']]
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, input_field_placeholder='YA ATAU TIDAK')
+        reply_markup1=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True, input_field_placeholder='PILIH MENU')
+        kamus = {
 			'penyakit': userNew.penyakit_tidak,
 			'gejala':userNew.gejala_tidak,
 		}
-		update_kamus = compute_next(kamus)
-		if update_kamus['message'] == 'belum':
-			userNew.penyakit_ya = update_kamus['penyakit_yes']
-			userNew.penyakit_tidak = update_kamus['penyakit_no']
-			userNew.gejala_ya = update_kamus['gejala_yes']
-			userNew.gejala_tidak = update_kamus['gejala_no']
-			userNew.gejala_next = update_kamus['pertanyaan']
-			update.message.reply_text(
+        update_kamus = compute_next(kamus)
+        if update_kamus['message'] == 'belum':
+            userNew.penyakit_ya = update_kamus['penyakit_yes']
+            userNew.penyakit_tidak = update_kamus['penyakit_no']
+            userNew.gejala_ya = update_kamus['gejala_yes']
+            userNew.gejala_tidak = update_kamus['gejala_no']
+            userNew.gejala_next = update_kamus['pertanyaan']
+            update.message.reply_text(
                 'Apakah kucing kamu mengalami gejala **' + update_kamus['pertanyaan'] + '**',
                 reply_markup=reply_markup)
-			return PROSES
-		elif update_kamus['message'] == 'sudah':
-			update.message.reply_text(
+            return PROSES
+        elif update_kamus['message'] == 'nothing':
+            update.message.reply_text(
+                'Mohon maaf, MeowBot tidak dapat menemukan penyakit yang diderita kucing kamu :(\n\n'
+                'MeowBot akan belajar lebih giat lagi..'
+            )
+            update.message.reply_text(
+                'Semoga kucing kamu baik-baik saja..\n',
+                reply_markup=reply_markup1
+            )
+            return ConversationHandler.END
+        elif update_kamus['message'] == 'sudah':
+            update.message.reply_text(
                 'Berdasarkan hasil diagnosa MeowBot, kemungkinan kucing kamu mengalami penyakit ' + update_kamus['pertanyaan'] + '.\n\n'
                 '**Deskripsi Penyakit ' + update_kamus['pertanyaan'] + ':\n'
                 '' + update_kamus['deskripsi'] + '\n\n'
                 '**Solusi yang ditawarkan MeowBot untuk kucing kamu :\n'
                 '' + update_kamus['solusi'] + '\n'
             )
-			update.message.reply_text(
+            update.message.reply_text(
                 'Semoga kucing kamu baik-baik saja..\n'
                 'Terima kasih sudah menggunakanku',
                 reply_markup=reply_markup1
             )
-			return ConversationHandler.END
+            return ConversationHandler.END
 
 def respond_info(update: Update, context: CallbackContext) -> int:
     reply_keyboard = [['/diagnosa'],['/info']]

@@ -55,16 +55,22 @@
               contentType: "application/json",
               dataType: 'json',
               success: function(result) {
-                console.log("Result:");
-                console.log(result);
-                resultsContainer.style.display = "block";
-                numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>"; 
-                penyakit_yes.value = result['penyakit_yes'];
-                penyakit_no.value = result['penyakit_no'];
-                gejala_yes.value = result['gejala_yes'];
-                gejala_no.value = result['gejala_no'];
-                button_tanggapan_ya.style.display='';
-                button_tanggapan_no.style.display='';
+                if (result['message'] == 'belum'){
+                    resultsContainer.style.display = "block";
+                    numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>"; 
+                    penyakit_yes.value = result['penyakit_yes'];
+                    penyakit_no.value = result['penyakit_no'];
+                    gejala_yes.value = result['gejala_yes'];
+                    gejala_no.value = result['gejala_no'];
+                    button_tanggapan_ya.style.display='';
+                    button_tanggapan_no.style.display='';
+                }
+                else if (result['message'] == 'nothing'){
+                    start.style.display='';
+                    button_tanggapan_ya.style.display='none';
+                    button_tanggapan_no.style.display='none';
+                    numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
+                }
               } 
             });
             start.style.display='none';
@@ -102,6 +108,12 @@
                     gejala_no.value = result['gejala_no'];
                     if (result['message'] == 'belum'){
                         numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>";
+                    }
+                    else if (result['message'] == 'nothing'){
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
                     }
                     else{
                         start.style.display='';
@@ -144,6 +156,12 @@
                     gejala_no.value = result['gejala_no'];
                     if (result['message'] == 'belum'){
                         numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>";
+                    }
+                    else if (result['message'] == 'nothing'){
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
                     }
                     else{
                         start.style.display='';
