@@ -82,7 +82,7 @@
                         {% if current_user.type_user == 'pakar' %}
                             <a href="{{ url_for('pakar_gejala') }}" class="btn menuitem">DATA GEJALA</a>
                             <a href="{{ url_for('pakar_penyakit') }}" class="btn menuitem">DATA PENYAKIT</a>
-                            <a href="{{ url_for('diagnosa') }}" class="btn menuitem">TES KONSULTASI</a>
+                            <!-- <a href="{{ url_for('diagnosa') }}" class="btn menuitem">TES KONSULTASI</a> -->
                         {% endif %}
                         {% if current_user.type_user == 'admin' %}
                             <a href="{{ url_for('register') }}" class="btn menuitem">DATA PENGGUNA</a>
