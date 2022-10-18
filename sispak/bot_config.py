@@ -31,7 +31,7 @@ def get_token_bot():
     return "5419959577:AAGLJNmPy1yb9ow9vJF2eGax9Fy0hXrFGRM"
 
 def get_url():
-    return "https://testing-ta.herokuapp.com/"
+    return "https://meowpakar.herokuapp.com/"
 
 TOKEN = get_token_bot()
 URL = get_url()

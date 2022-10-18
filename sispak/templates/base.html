@@ -82,13 +82,14 @@
                         {% if current_user.type_user == 'pakar' %}
                             <a href="{{ url_for('pakar_gejala') }}" class="btn menuitem">DATA GEJALA</a>
                             <a href="{{ url_for('pakar_penyakit') }}" class="btn menuitem">DATA PENYAKIT</a>
+                            <a href="{{ url_for('pakar_profil') }}" class="btn btn-green menuitem">PROFIL</a>
                             <!-- <a href="{{ url_for('diagnosa') }}" class="btn menuitem">TES KONSULTASI</a> -->
                         {% endif %}
                         {% if current_user.type_user == 'admin' %}
                             <a href="{{ url_for('register') }}" class="btn menuitem">DATA PENGGUNA</a>
+                            <a href="{{ url_for('admin_profil') }}" class="btn btn-green menuitem">PROFIL</a>
                         {% endif %}
                         {% if current_user.type_user in ['admin','pakar'] %}
-                            <a href="{{ url_for('my_profil') }}" class="btn btn-green menuitem">PROFIL</a>
                             <a href="{{ url_for('logout') }}" class="btn btn-red menuitem">LOGOUT</a>
                         {% endif %}
                         <a href="javascript:void(0);" class="icon" onclick="myFunction()">

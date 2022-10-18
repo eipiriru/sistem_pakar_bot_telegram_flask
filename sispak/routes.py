@@ -31,7 +31,10 @@ def initial():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     form = LoginForm()
     if form.validate_on_submit():
@@ -44,9 +47,13 @@ def login():
         flash('Login Success')
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
+        # if not next_page or url_parse(next_page).netloc != '':
+        #     next_page = url_for('index')
+        # return redirect(next_page)
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     data_user = User.query.all()
     return render_template('login.html', title='Log in', form=form, pjg=len(data_user))
@@ -54,17 +61,23 @@ def login():
 @app.route('/logout/')
 @login_required
 def logout():
+    print ("before")
+    print (current_user)
+    print (current_user.type_user)
     logout_user()
+    print ("after")
+    print (current_user)
+    # print (current_user.type_user)
     return redirect(url_for('login'))
 
 @app.route('/')
 @app.route('/index/')
-@login_required
 def index():
-    if current_user.type_user == 'admin':
-        return redirect(url_for('admin_page'))
-    elif current_user.type_user == 'pakar':
-        return redirect(url_for('pakar_page'))
+    if current_user.is_authenticated:
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
     else:
         return redirect(url_for('login'))
 
@@ -75,8 +88,6 @@ def my_profil():
         return redirect(url_for('admin_profil'))
     elif current_user.type_user == 'pakar':
         return redirect(url_for('pakar_profil'))
-    else:
-        return redirect(url_for('login'))
 
 @app.route('/index/editmyprofil/')
 @login_required
@@ -93,8 +104,10 @@ def edit_my_profil():
 @login_required
 def admin_page():
     if current_user.type_user != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     return render_template('admin.html', title='Admin - Dashboard')
 
@@ -102,8 +115,10 @@ def admin_page():
 @login_required
 def admin_profil():
     if current_user.type_user != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     search_user = User.query.filter(User.id == current_user.id).first()
     return render_template('profil.html', title='Admin - Profil', edit=False, user=search_user)
@@ -112,8 +127,10 @@ def admin_profil():
 @login_required
 def admin_edit_profil():
     if current_user.type_user != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     search_user = User.query.filter(User.id == current_user.id).first()
     form = ProfilForm()
@@ -133,8 +150,10 @@ def admin_edit_profil():
 @login_required
 def register():
     if current_user.type_user != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -148,12 +167,14 @@ def register():
     data_user = User.query.all()
     return render_template('register.html', title='Tambah Data Administrator / Pakar', form=form, data_pengguna=data_user, pjg=len(data_user))
 
-@app.route('/admin/user/delete?<id_user>/', methods=['GET', 'POST'])
+@app.route('/admin/user/delete/<id_user>/', methods=['GET', 'POST'])
 @login_required
 def delete_user(id_user):
     if current_user.type_user != 'admin':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     search_user = User.query.filter(User.id == id_user)
     user = search_user.first()
@@ -208,8 +229,10 @@ def delete_user(id_user):
 @login_required
 def pakar_page():
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
     
     data_penyakit = Penyakit.query.order_by(Penyakit.id).all()
     data_gejala = Gejala.query.order_by(Gejala.id).all()
@@ -225,8 +248,10 @@ def pakar_page():
 @login_required
 def pakar_profil():
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     search_user = User.query.filter(User.id == current_user.id).first()
     return render_template('profil.html', title='Pakar - Profil', edit=False, user=search_user)
@@ -235,8 +260,10 @@ def pakar_profil():
 @login_required
 def pakar_edit_profil():
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     search_user = User.query.filter(User.id == current_user.id).first()
     form = ProfilForm()
@@ -256,8 +283,10 @@ def pakar_edit_profil():
 @login_required
 def pakar_gejala():
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     form = FormGejala()
     if form.validate_on_submit():
@@ -276,12 +305,14 @@ def pakar_gejala():
     kode = "G{0:03}".format(last_id + 1)
     return render_template('pakar_gejala.html', title='Pakar - Data Gejala', form=form, kode=kode, gejala=data_gejala)
 
-@app.route('/pakar/gejala/view?<id_gejala>&<editable>/', methods=['GET', 'POST'])
+@app.route('/pakar/gejala/view/<id_gejala>/<editable>/', methods=['GET', 'POST'])
 @login_required
 def pakar_gejala_view(id_gejala, editable):
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     form = FormGejala()
     if form.validate_on_submit():
@@ -297,12 +328,14 @@ def pakar_gejala_view(id_gejala, editable):
     form.deskripsi.data = data_gejala.deskripsi
     return render_template('pakar_gejala_view.html', title='Pakar - Data Gejala', form=form, edit=editable, gejala=data_gejala)
 
-@app.route('/pakar/gejala/delete?<id_gejala>/', methods=['GET', 'POST'])
+@app.route('/pakar/gejala/delete/<id_gejala>/', methods=['GET', 'POST'])
 @login_required
 def pakar_gejala_delete(id_gejala):
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     gejala = Gejala.query.filter(Gejala.id == id_gejala)
     data_gejala = gejala.first()
@@ -320,8 +353,10 @@ def pakar_gejala_delete(id_gejala):
 @login_required
 def pakar_penyakit():
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     form = FormPenyakit()
     gejala_list = Gejala.query.order_by(Gejala.id).all()
@@ -338,7 +373,7 @@ def pakar_penyakit():
             penyakit.gejala.append(gejala)
             db.session.commit()
 
-        flash('Penyakit %s - %s berhasil disimpan!' % (form.kode.data, form.gejala.data))
+        flash('Penyakit %s - %s berhasil disimpan!' % (form.kode.data, form.penyakit.data))
         return redirect(url_for('pakar_penyakit'))
 
     data_penyakit = Penyakit.query.order_by(Penyakit.id).all()
@@ -350,12 +385,14 @@ def pakar_penyakit():
     kode = "P{0:03}".format(last_id + 1)
     return render_template('pakar_penyakit.html', title='Pakar - Data Penyakit', form=form, kode=kode, penyakit=data_penyakit)
 
-@app.route('/pakar/penyakit/view?<id_penyakit>&<editable>/', methods=['GET', 'POST'])
+@app.route('/pakar/penyakit/view/<id_penyakit>/<editable>/', methods=['GET', 'POST'])
 @login_required
 def pakar_penyakit_view(id_penyakit, editable):
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     form = FormPenyakit()
     gejala_list = Gejala.query.order_by(Gejala.id).all()
@@ -384,12 +421,14 @@ def pakar_penyakit_view(id_penyakit, editable):
     form.gejala.data = [i.id for i in data_penyakit.gejala]
     return render_template('pakar_penyakit_view.html', title='Pakar - Data Penyakit', form=form, edit=editable, penyakit=data_penyakit)
     
-@app.route('/pakar/penyakit/delete?<id_penyakit>/', methods=['GET', 'POST'])
+@app.route('/pakar/penyakit/delete/<id_penyakit>/', methods=['GET', 'POST'])
 @login_required
 def pakar_penyakit_delete(id_penyakit):
     if current_user.type_user != 'pakar':
-        flash('User tidak memiliki hak akses')
-        return redirect(url_for('index'))
+        if current_user.type_user == 'admin':
+            return redirect(url_for('admin_page'))
+        elif current_user.type_user == 'pakar':
+            return redirect(url_for('pakar_page'))
 
     penyakit = Penyakit.query.filter(Penyakit.id == id_penyakit)
     data_penyakit = penyakit.first()

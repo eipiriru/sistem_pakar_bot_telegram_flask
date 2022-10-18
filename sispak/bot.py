@@ -335,7 +335,7 @@ def respond_info(update: Update, context: CallbackContext) -> int:
     )
 
     return ConversationHandler.END
-
+    
 run_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
@@ -365,13 +365,15 @@ dispatcher.add_handler(info_handler)
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
 	update = telegram.Update.de_json(request.get_json(force=True), bot)
-	updater.start_polling()
+# 	bot.sendMessage(chat_id=update.message.chat_id, text='Hello, there')
+	dispatcher.process_update(update)
+# 	updater.start_polling()
 	return 'ok'
 
-@app.route('/bottelegram', methods=['GET', 'POST'])
+@app.route('/setbottelegram', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
     if s:
-        return "Bot Telegram Active Successfully"
+        return "Webhoook for Bot Telegram is Active"
     else:
         return "Bot Telegram Failed"
