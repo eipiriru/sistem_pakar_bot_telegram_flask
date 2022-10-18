@@ -61,13 +61,7 @@ def login():
 @app.route('/logout/')
 @login_required
 def logout():
-    print ("before")
-    print (current_user)
-    print (current_user.type_user)
     logout_user()
-    print ("after")
-    print (current_user)
-    # print (current_user.type_user)
     return redirect(url_for('login'))
 
 @app.route('/')
@@ -326,7 +320,8 @@ def pakar_gejala_view(id_gejala, editable):
 
     data_gejala = Gejala.query.get(id_gejala)
     form.deskripsi.data = data_gejala.deskripsi
-    return render_template('pakar_gejala_view.html', title='Pakar - Data Gejala', form=form, edit=editable, gejala=data_gejala)
+    return render_template('pakar_gejala_view.html', 
+        title='Pakar - Data Gejala', form=form, edit=editable, gejala=data_gejala)
 
 @app.route('/pakar/gejala/delete/<id_gejala>/', methods=['GET', 'POST'])
 @login_required
@@ -419,7 +414,8 @@ def pakar_penyakit_view(id_penyakit, editable):
     form.deskripsi.data = data_penyakit.deskripsi
     form.penanganan.data = data_penyakit.penanganan
     form.gejala.data = [i.id for i in data_penyakit.gejala]
-    return render_template('pakar_penyakit_view.html', title='Pakar - Data Penyakit', form=form, edit=editable, penyakit=data_penyakit)
+    return render_template('pakar_penyakit_view.html', 
+        title='Pakar - Data Penyakit', form=form, edit=editable, penyakit=data_penyakit)
     
 @app.route('/pakar/penyakit/delete/<id_penyakit>/', methods=['GET', 'POST'])
 @login_required

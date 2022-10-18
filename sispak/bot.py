@@ -24,7 +24,7 @@ bot = telegram.Bot(token=TOKEN)
 updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
-GENDER, PHOTO, LOCATION, BIO, START, PROSES = range(6)
+START, PROSES = range(2)
 
 user_dict = {}
 
@@ -36,7 +36,6 @@ class UserNew:
 		self.penyakit_tidak = None
 		self.gejala_ya = None
 		self.gejala_tidak = None
-		self.bio = None
 
 def start(update: Update, context: CallbackContext) -> int:
     """Starts the conversation"""
@@ -74,8 +73,6 @@ def compute_next(kamus):
     item = 0
     for i in gejala:
         c = Gejala.query.filter(Gejala.id == i.id).one()
-        print (c.gejala)
-        print (len(c.penyakit))
         if item == 0:
             a = Gejala.query.filter(Gejala.id == i.id).one()
             if len(a.penyakit) == panjang_penyakit:
