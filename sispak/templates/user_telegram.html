@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="isi_data" style="overflow-x:auto;">
+        <h3>User Telegram</h3>
+        <table id="dtHorizontalExample" class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in list_user %}
+                    <tr>
+                        <td><a href="{{ url_for('user_telegram_view_history', id_user = data.id) }}">{{ data.name }}</a></td>
+                        <td><a href="{{ url_for('delete_user_telegram', id_user = data.id) }}">delete</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

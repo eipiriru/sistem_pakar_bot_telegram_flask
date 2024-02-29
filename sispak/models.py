@@ -32,18 +32,45 @@ class Penyakit(db.Model):
     __tablename__ = 'penyakit'
     id = db.Column(db.Integer, primary_key=True)
     kode = db.Column(db.String(5), unique=True)
-    penyakit = db.Column(db.String(50))
+    penyakit = db.Column(db.String(100))
     deskripsi = db.Column(db.Text)
     penanganan = db.Column(db.Text)
     gejala = db.relationship("Gejala", secondary=relasi_tabel)
+    data = db.Column(db.LargeBinary)
+    rendered_data = db.Column(db.Text)
 
 class Gejala(db.Model):
     __tablename__ = 'gejala'
     id = db.Column(db.Integer, primary_key=True)
     kode = db.Column(db.String(5), unique=True)
-    gejala = db.Column(db.String(50))
+    gejala = db.Column(db.String(100))
     deskripsi = db.Column(db.Text)
     penyakit = db.relationship("Penyakit", secondary=relasi_tabel)
+
+class UserTelegram(db.Model):
+    __tablename__ = 'usertelegram'
+    id = db.Column(db.Integer, primary_key=True)
+    id_bot = db.Column(db.BigInteger, unique=True)
+    username = db.Column(db.String(64))
+    name = db.Column(db.String(64))
+    history = db.relationship("HistoryDiagnosa", backref='history')
+
+class HistoryDiagnosa(db.Model):
+    __tablename__ = 'history_diagnosa'
+    id = db.Column(db.Integer, primary_key=True)
+    usertelegram_id = db.Column(db.Integer, db.ForeignKey('usertelegram.id',ondelete='CASCADE'))
+    tanggal = db.Column(db.DateTime)
+    proses = db.relationship("ProsesDiagnosa", backref='proses')
+    hasil = db.Column(db.String(64))
+
+class ProsesDiagnosa(db.Model):
+    __tablename__ = 'proses_diagnosa'
+    id = db.Column(db.Integer, primary_key=True)
+    history_id = db.Column(db.Integer, db.ForeignKey('history_diagnosa.id',ondelete='CASCADE'))
+    seq = db.Column(db.Integer)
+    gejala = db.Column(db.String(64))
+    respon = db.Column(db.String(9))
+
 
 # class BotConfig(db.Model):
 #     __tablename__ = 'bot_config'

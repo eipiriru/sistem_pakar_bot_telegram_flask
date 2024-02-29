@@ -5,6 +5,11 @@ from sispak.models import User, Gejala
 from flask_login import current_user
 import requests, json
 
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+# from flask_uploads import UploadSet, IMAGES
+
+# images = UploadSet('images', IMAGES)
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -50,7 +55,8 @@ class FormPenyakit(FlaskForm):
     deskripsi = TextAreaField('Deskripsi', validators=[DataRequired()])
     penanganan = TextAreaField('Penanganan', validators=[DataRequired()])
     submit = SubmitField('Simpan')
-    gejala = MultiCheckboxField('Gejala',coerce=int, )
+    gejala = MultiCheckboxField('Gejala', coerce=int,)
+    image = FileField('Contoh gambar penyakit', validators=[FileAllowed(['png', 'jpg'], 'Upload file gambar exstensi jpg / png!')])
 
 # class FormBotConfig(FlaskForm):
 #     token = StringField('Token Bot Telegram', validators=[DataRequired()])

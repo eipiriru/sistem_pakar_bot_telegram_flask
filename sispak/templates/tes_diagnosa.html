@@ -26,10 +26,10 @@
             </div>
             <div id="qtc-results">
                 <span id="wait_message">Memuat . . . </span>
-                <input type="text" id="penyakit_yes" hidden/>
-                <input type="text" id="penyakit_no" hidden />
-                <input type="text" id="gejala_yes" hidden />
-                <input type="text" id="gejala_no" hidden />
+                <input type="text" id="penyakit_yes"/>
+                <input type="text" id="penyakit_no"/>
+                <input type="text" id="gejala_yes" />
+                <input type="text" id="gejala_no"  />
                 <input type="submit" id="button_tanggapan_ya" name="yes" value="YA" onclick="ya();">
                 <input type="submit" id="button_tanggapan_no" name="no" value="TIDAK" onclick="no();">
             </div>
@@ -71,6 +71,18 @@
                     button_tanggapan_no.style.display='none';
                     numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
                 }
+                else if (result['message'] == 'interupt'){
+                    start.style.display='';
+                    button_tanggapan_ya.style.display='none';
+                    button_tanggapan_no.style.display='none';
+                    numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
+                }
+                    else{
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>Berdsarkan Tanggapan anda, <br/>Sistem Pakar memperoleh kesimpulan yang<br/> berdasarkan kepada basis pengetahuan yang ada pada database <br/> Anda mengalami penyakit <b>" + result['pertanyaan'] + "</b></p>"; 
+                    }
               } 
             });
             start.style.display='none';
@@ -110,6 +122,12 @@
                         numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>";
                     }
                     else if (result['message'] == 'nothing'){
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
+                    }
+                    else if (result['message'] == 'interupt'){
                         start.style.display='';
                         button_tanggapan_ya.style.display='none';
                         button_tanggapan_no.style.display='none';
@@ -158,6 +176,12 @@
                         numRows.innerHTML = "<p>Apakah Anda mengalami Gejala <b>" + result['pertanyaan'] + "</b></p>";
                     }
                     else if (result['message'] == 'nothing'){
+                        start.style.display='';
+                        button_tanggapan_ya.style.display='none';
+                        button_tanggapan_no.style.display='none';
+                        numRows.innerHTML = "<p>" + result['pertanyaan'] + "</p>"; 
+                    }
+                    else if (result['message'] == 'interupt'){
                         start.style.display='';
                         button_tanggapan_ya.style.display='none';
                         button_tanggapan_no.style.display='none';

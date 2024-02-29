@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="isi_data" style="overflow-x:auto;">
+        <h3>{{ title }}</h3>
+        <table id="dtHorizontalExample" class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Hasil</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in list_history %}
+                    <tr>
+                        <td><a href="{{ url_for('view_proses_history', id_history = data.id) }}">{{ data.tanggal }}</a></td>
+                        <td><a href="{{ url_for('view_proses_history', id_history = data.id) }}">{{ data.hasil }}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -34,3 +34,5 @@ install/win32/meta.py
 /share/
 /src/
 *.zip
+.vercel
+.pyc

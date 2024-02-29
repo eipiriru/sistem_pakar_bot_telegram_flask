@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content0 %}
+    <div class="isi_data" style="overflow-x:auto;">
+        <h3>{{ title }}</h3>
+        <a href="{{ url_for('user_telegram_view_history', id_user = history.usertelegram_id) }}"><< Back</a>
+        <table id="dtHorizontalExample" class="table table-striped table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>Urutan</th>
+                    <th>Pertanyaan</th>
+                    <th>Respon</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in proses %}
+                    <tr>
+                        <td>{{ data.seq }}</td>
+                        <td>{{ data.gejala }}</td>
+                        <td>{{ data.respon }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3>Hasil Diagnosa : {{ history.hasil }}</h3>
+    </div>
+{% endblock %}

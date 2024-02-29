@@ -4,7 +4,7 @@
     <div class="tambah_data">
         {% if edit == "True" %}
             <h3>Edit Data Penyakit</h3>
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 {{ form.submit(class="btn btn-base") }}
                 <table class="table-register">
@@ -53,8 +53,35 @@
                             {% endfor %}
                         </td>
                     </tr>
+                    <tr>
+                        <td>{{ form.image.label }}</td>
+                        <td>
+                            {{ form.image(id="imgUp",accept="image/png, image/jpeg") }}
+                            {% for error in form.image.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                            <br/>
+                            {% if img_data %}
+                                <br/>
+                                <a href="{{ url_for('pakar_penyakit_image_delete', id_penyakit = penyakit.id) }}" class="btn menuitem">Delete Image</a>
+                                <br/>
+                            {% endif %}
+                            
+                            <br/>
+                            <img id="blah" src="data:image/png;base64,{{ img_data }}" alt="Preview" style="width:40%; max-height: 50vh;"/>
+                        </td>
+                    </tr>
                 </table>
             </form>
+            
+            <script>
+                imgUp.onchange = evt => {
+                    const [file] = imgUp.files
+                    if (file) {
+                        blah.src = URL.createObjectURL(file)
+                    }
+                }
+            </script>
         {% else %}
             <h3>Data Penyakit</h3>
             <a href="{{ url_for('pakar_penyakit_view', id_penyakit = penyakit.id, editable=True) }}" class="btn btn-base">Edit</a>
@@ -116,6 +143,12 @@
                             {% for error in form.penanganan.errors %}
                                 <span style="color: red;">[{{ error }}]</span>
                             {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.image.label }}</td>
+                        <td>
+                            <img id="picture" src="data:image/png;base64,{{ img_data }}" alt="Preview" style="width:40%; max-height: 50vh;">
                         </td>
                     </tr>
                 </table>
